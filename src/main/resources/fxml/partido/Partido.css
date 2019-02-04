@@ -1,0 +1,15 @@
+.background {
+    -fx-background-color: #1d1d1d;
+}
+
+.button {
+    /* buttons do not have rounded corners */
+    -fx-background-radius: 0;
+    -fx-label-padding: 0.3em 0.833333em 0.35em 0.833333em;
+}
+
+.button-menu {
+    
+    -fx-pref-height: 150px;
+    -fx-pref-width: 100px;
+}

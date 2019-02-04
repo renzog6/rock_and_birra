@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0"  xmlns:fx="http://javafx.com/fxml" fx:controller="ar.nex.syscontrol.caja.CajaMainController">
+    <stylesheets>
+        <URL value="@Partido.css" />
+    </stylesheets>
+    <center>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <children>
+                <TableView fx:id="tblPartido" layoutX="-9.0" layoutY="14.0" onMouseClicked="#showOnClick" prefHeight="358.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>                        
+                        <TableColumn fx:id="colFecha" prefWidth="120.0" text="Fecha" />
+                        <TableColumn fx:id="colNombre" prefWidth="180.0" text="Movimiento" />
+                        <TableColumn fx:id="colEstado" prefWidth="90.0" text="Saldo" />
+                        <TableColumn fx:id="colComentario" prefWidth="100.0" text="Comentario" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </children>
+        </AnchorPane>
+    </center>
+    <top>
+        <AnchorPane nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" BorderPane.alignment="CENTER">
+            <children>                
+                <Button fx:id="signOut" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="26.0" layoutY="13.0" mnemonicParsing="false" onAction="#goSignOut" text="Salir" />
+            </children>
+        </AnchorPane>
+    </top>
+    <bottom>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <children>                        
+                <Button fx:id="addnewBtn" layoutX="110.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#AddPartido" text="Agregar" />
+            </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="50.0">
+            <children>
+                <Button fx:id="updateBtn" layoutX="61.0" layoutY="9.0" minWidth="100.0" mnemonicParsing="false" onAction="#Update" text="Actualizar" />                        
+                <Button fx:id="deleteBtn" layoutX="191.0" layoutY="9.0" minWidth="100.0" mnemonicParsing="false" onAction="#Delete" text="Borrar" />
+                <Button fx:id="btnVerPartidos" layoutX="350.0" layoutY="9.0" minWidth="100.0" mnemonicParsing="false" onAction="#VerPartidos" text="Ver Partidos" />
+            </children>
+        </AnchorPane>
+    </bottom>
+</BorderPane>

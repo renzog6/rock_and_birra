@@ -1,0 +1,7 @@
+.background {
+    -fx-background-color: bisque;
+}
+
+.column-center {
+  -fx-alignment: CENTER;
+}
