@@ -2,17 +2,18 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="SysControl-PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>ar.nex.syscontrol.login.Usuario</class>
-    <class>ar.nex.syscontrol.cliente.Cliente</class>
-    <class>ar.nex.syscontrol.caja.CajaMovTipo</class>
+    <class>ar.nex.articulo.Articulo</class>
     <class>ar.nex.syscontrol.partido.Partido</class>
-    <class>ar.nex.syscontrol.config.Historial</class>
+    <class>ar.nex.syscontrol.caja.CajaMovTipo</class>
     <class>ar.nex.syscontrol.caja.CajaMovCliente</class>
     <class>ar.nex.syscontrol.caja.CajaMov</class>
+    <class>ar.nex.syscontrol.login.Usuario</class>
+    <class>ar.nex.syscontrol.cliente.Cliente</class>
+    <class>ar.nex.syscontrol.config.Historial</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:c:\java\syscontrol.db"/>
-      <property name="javax.persistence.jdbc.user" value=""/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Rock_and_Birra\rock_and_birra.db"/>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+      <property name="javax.persistence.jdbc.user" value=""/>
       <property name="javax.persistence.jdbc.password" value=""/>
     </properties>
   </persistence-unit>

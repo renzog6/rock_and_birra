@@ -1,6 +1,6 @@
 package ar.nex.syscontrol.config;
 
-import ar.nex.syscontrol.MainApp;
+import ar.nex.app.MainApp;
 import ar.nex.syscontrol.login.LoginController;
 import java.net.URL;
 import java.util.List;

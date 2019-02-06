@@ -2,7 +2,7 @@ package ar.nex.syscontrol.login;
 
 import java.io.IOException;
 
-import ar.nex.syscontrol.MainApp;
+import ar.nex.app.MainApp;
 import ar.nex.syscontrol.config.Historial;
 import ar.nex.syscontrol.config.HistorialService;
 import java.net.URL;

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import ar.nex.syscontrol.MainApp;
+import ar.nex.app.MainApp;
 import ar.nex.syscontrol.login.Usuario;
 import ar.nex.syscontrol.login.UsuarioJpaController;
 import java.util.List;

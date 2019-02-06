@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package ar.nex.syscontrol;
+package ar.nex.app;
 
 import ar.nex.syscontrol.login.LoginController;
 import java.io.IOException;
@@ -14,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 
 /**
  * FXML Controller class
@@ -24,6 +18,8 @@ import javafx.scene.control.ProgressIndicator;
 public class MainMenuController implements Initializable {
 
     @FXML
+    Button btnArticulo;
+    @FXML
     Button btnPartidos;
     @FXML
     Button btnClientes;
@@ -32,10 +28,9 @@ public class MainMenuController implements Initializable {
     @FXML
     Button btnConfig;
     @FXML
-    Label lblUser;
-
+    Button btnHistorial;
     @FXML
-    ProgressIndicator progressIndicator;
+    Label lblUser;
 
     @FXML
     public void goPartidos() throws IOException {
@@ -52,20 +47,20 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    @FXML
-    public void goArticulos() throws IOException {
-        try {
-            boolean isLogin = true;
-            if (isLogin) {
-                MainApp.showArticulos();
-            } else {
-                System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            }
-        } catch (Exception e) {
-            System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            e.printStackTrace();
-        }
-    }
+//    @FXML
+//    public void goArticulos() throws IOException {
+//        try {
+//            boolean isLogin = true;
+//            if (isLogin) {
+//                MainApp.showArticulos();
+//            } else {
+//                System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
+//            }
+//        } catch (Exception e) {
+//            System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
+//            e.printStackTrace();
+//        }
+//    }
 
     @FXML
     public void goCajaMovCliente() throws IOException {
@@ -126,23 +121,24 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    @FXML
-    public void goHistorial() throws IOException {
-        try {
-            System.out.println("ar.nex.syscontrol.MainMenuController.goConfig()");
-            MainApp.goHistorial();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @FXML
+//    public void goHistorial() throws IOException {
+//        try {
+//            System.out.println("ar.nex.syscontrol.MainMenuController.goConfig()");
+//            MainApp.showHistorial();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb
-    ) {
+    public void initialize(URL url, ResourceBundle rb) {
 
+        btnArticulo.setOnAction(e -> MainApp.showMe(2));
+        btnHistorial.setOnAction(e -> MainApp.showMe(11));
         lblUser.setText("Usuario [ " + LoginController.getUserLogin().getName() + " ]");
     }
 

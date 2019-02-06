@@ -1,4 +1,4 @@
-package ar.nex.syscontrol;
+package ar.nex.app;
 
 import java.io.IOException;
 import javafx.application.Application;
@@ -16,7 +16,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         MainApp.stage = stage;
-        MainApp.stage.setTitle("SysControl");
+        MainApp.stage.setTitle("Rock & Birra");
         stage.setMaximized(true);
         MainApp.showMain();
         //MainApp.showClientes();
@@ -24,6 +24,34 @@ public class MainApp extends Application {
         MainApp.showLogin();
         //MainApp.showHome();
         //MainApp.showPartidos();
+    }
+
+    public static void showMe(int i) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+
+            switch (i) {
+                case 1:
+                    loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
+                    break;
+                case 2:
+                    loader.setLocation(MainApp.class.getResource("/fxml/Articulo.fxml"));
+                    break;
+                case 3:
+                    //MainApp.showClientes();
+                    break;
+                case 11:
+                    loader.setLocation(MainApp.class.getResource("/fxml/config/HistorialDetalle.fxml"));
+                    break;
+                default:
+                    break;
+            }
+
+            BorderPane mainItems = loader.load();
+            mainLayout.setCenter(mainItems);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void showMain() throws IOException {
@@ -48,14 +76,6 @@ public class MainApp extends Application {
     public static void showPartidos() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/partido/Partido.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showArticulos() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/caja/Articulo.fxml"));
         BorderPane mainItems = loader.load();
         //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
         mainLayout.setCenter(mainItems);
@@ -92,7 +112,7 @@ public class MainApp extends Application {
         //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
         mainLayout.setCenter(mainItems);
     }
-    
+
     public static void showCaja() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/caja/CajaMov.fxml"));
@@ -100,7 +120,7 @@ public class MainApp extends Application {
         //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
         mainLayout.setCenter(mainItems);
     }
-    
+
     public static void showLogin() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
@@ -115,12 +135,6 @@ public class MainApp extends Application {
         mainLayout.setCenter(mainItems);
     }
 
-    public static void goHistorial() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/config/HistorialDetalle.fxml"));
-        BorderPane mainItems = loader.load();
-        mainLayout.setCenter(mainItems);
-    }
 
     public static void showInformationAlertBox(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
