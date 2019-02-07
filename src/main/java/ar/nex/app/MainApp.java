@@ -60,7 +60,7 @@ public class MainApp extends Application {
         mainLayout = loader.load();
 
         Scene scene = new Scene(mainLayout);
-        scene.getStylesheets().add("/styles/Styles.css");
+       // scene.getStylesheets().add("/styles/Styles.css");
         stage.setScene(scene);
         stage.show();
     }
