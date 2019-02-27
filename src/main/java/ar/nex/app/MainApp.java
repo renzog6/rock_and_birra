@@ -3,6 +3,7 @@ package ar.nex.app;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
@@ -15,9 +16,11 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+          
+        
         MainApp.stage = stage;
         MainApp.stage.setTitle("Rock & Birra");
-        stage.setMaximized(true);
+        MainApp.stage.setMaximized(true);
         MainApp.showMain();
         //MainApp.showClientes();
         //MainApp.showMainMenu();
@@ -38,7 +41,7 @@ public class MainApp extends Application {
                     loader.setLocation(MainApp.class.getResource("/fxml/Articulo.fxml"));
                     break;
                 case 3:
-                    //MainApp.showClientes();
+                    loader.setLocation(MainApp.class.getResource("/fxml/stock/Stock.fxml"));
                     break;
                 case 11:
                     loader.setLocation(MainApp.class.getResource("/fxml/config/HistorialDetalle.fxml"));
@@ -60,11 +63,11 @@ public class MainApp extends Application {
         mainLayout = loader.load();
 
         Scene scene = new Scene(mainLayout);
-       // scene.getStylesheets().add("/styles/Styles.css");
+        // scene.getStylesheets().add("/styles/Styles.css");
         stage.setScene(scene);
         stage.show();
     }
-
+    
     public static void showMainMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/MainMenu.fxml"));
@@ -134,7 +137,6 @@ public class MainApp extends Application {
         BorderPane mainItems = loader.load();
         mainLayout.setCenter(mainItems);
     }
-
 
     public static void showInformationAlertBox(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

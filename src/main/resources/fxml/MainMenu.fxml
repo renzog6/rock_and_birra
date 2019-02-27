@@ -26,17 +26,17 @@
                         <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>                   
-                        <Button fx:id="btnCaja" mnemonicParsing="false" onAction="#goCaja" styleClass="button-menu" text="Caja" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="btnArticulo" mnemonicParsing="false" styleClass="button-menu" text="Articulos" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="btnCliente" mnemonicParsing="false" onAction="#goClientes" styleClass="button-menu" text="Clientes" GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />                        
+                        <Button fx:id="btnCaja" mnemonicParsing="false" onAction="#goCaja" styleClass="button-menu" text="Caja" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnArticulo" mnemonicParsing="false" styleClass="button-menu" text="Articulos" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnCliente" mnemonicParsing="false" onAction="#goClientes" styleClass="button-menu" text="Clientes" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />                        
                         
-                        <Button fx:id="btnConfig" mnemonicParsing="false" onAction="#goCajaMovCliente" styleClass="button-menu" text="Caja Clientes" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="btnHistorial" mnemonicParsing="false" styleClass="button-menu" text="Historial" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="btnUsuarios" mnemonicParsing="false" onAction="#goConfig" styleClass="button-menu" text="Usuarios" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnConfig" mnemonicParsing="false" onAction="#goCajaMovCliente" styleClass="button-menu" text="Vanta" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnHistorial" mnemonicParsing="false" styleClass="button-menu" text="Compra" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnUsuarios" mnemonicParsing="false" onAction="#goConfig" styleClass="button-menu" text="Proveedores" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         
-                        <Button fx:id="btnPartidos" mnemonicParsing="false" onAction="#goPartidos" styleClass="button-menu" text="Partidos" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button mnemonicParsing="false" styleClass="button-menu" text="Stock" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />                           
-                        <Button mnemonicParsing="false" styleClass="button-menu" text="XXX" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />                           
+                        <Button fx:id="btnPartidos" mnemonicParsing="false" styleClass="button-menu" text="Partidos" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnStock" mnemonicParsing="false" styleClass="button-menu" text="Stock" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />                           
+                        <Button mnemonicParsing="false" styleClass="button-menu" text="Usuarios" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />                           
                     </children>
                 </GridPane>
             </children>

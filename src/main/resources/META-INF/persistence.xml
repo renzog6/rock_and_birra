@@ -2,7 +2,6 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="SysControl-PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>ar.nex.articulo.Articulo</class>
     <class>ar.nex.syscontrol.partido.Partido</class>
     <class>ar.nex.syscontrol.caja.CajaMovTipo</class>
     <class>ar.nex.syscontrol.caja.CajaMovCliente</class>
@@ -10,6 +9,15 @@
     <class>ar.nex.syscontrol.login.Usuario</class>
     <class>ar.nex.syscontrol.cliente.Cliente</class>
     <class>ar.nex.syscontrol.config.Historial</class>
+    <class>ar.nex.articulo.Categoria</class>
+    <class>ar.nex.stock.Stock</class>
+    <class>ar.nex.caja.Ctest</class>
+    <class>ar.nex.venta.Venta</class>
+    <class>ar.nex.compra.Compra</class>
+    <class>ar.nex.compra.Proveedor</class>
+    <class>ar.nex.venta.Cliente</class>
+    <class>ar.nex.stock.Historia</class>
+    <class>ar.nex.articulo.Articulo</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Rock_and_Birra\rock_and_birra.db"/>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>

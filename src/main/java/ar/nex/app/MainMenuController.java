@@ -20,7 +20,7 @@ public class MainMenuController implements Initializable {
     @FXML
     Button btnArticulo;
     @FXML
-    Button btnPartidos;
+    Button btnStock;
     @FXML
     Button btnClientes;
     @FXML
@@ -31,36 +31,6 @@ public class MainMenuController implements Initializable {
     Button btnHistorial;
     @FXML
     Label lblUser;
-
-    @FXML
-    public void goPartidos() throws IOException {
-        try {
-            boolean isLogin = true;
-            if (isLogin) {
-                MainApp.showPartidos();
-            } else {
-                System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            }
-        } catch (Exception e) {
-            System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            e.printStackTrace();
-        }
-    }
-
-//    @FXML
-//    public void goArticulos() throws IOException {
-//        try {
-//            boolean isLogin = true;
-//            if (isLogin) {
-//                MainApp.showArticulos();
-//            } else {
-//                System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-//            }
-//        } catch (Exception e) {
-//            System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-//            e.printStackTrace();
-//        }
-//    }
 
     @FXML
     public void goCajaMovCliente() throws IOException {
@@ -121,15 +91,6 @@ public class MainMenuController implements Initializable {
         }
     }
 
-//    @FXML
-//    public void goHistorial() throws IOException {
-//        try {
-//            System.out.println("ar.nex.syscontrol.MainMenuController.goConfig()");
-//            MainApp.showHistorial();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     /**
      * Initializes the controller class.
@@ -138,6 +99,7 @@ public class MainMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         btnArticulo.setOnAction(e -> MainApp.showMe(2));
+        btnStock.setOnAction(e -> MainApp.showMe(3));
         btnHistorial.setOnAction(e -> MainApp.showMe(11));
         lblUser.setText("Usuario [ " + LoginController.getUserLogin().getName() + " ]");
     }

@@ -43,14 +43,16 @@ public class ArticuloController implements Initializable {
     @FXML
     private TableColumn<?, ?> colNombre;
     @FXML
-    private TableColumn<?, ?> colImporte;
+    private TableColumn<?, ?> colPCompra;
+    @FXML
+    private TableColumn<?, ?> colPVenta;
     @FXML
     private TableColumn<?, ?> colObservacion;
 
     @FXML
     Button btnAdd;
     @FXML
-    Button updateBtn;
+    Button btnEdit;
     @FXML
     Button deleteBtn;
     @FXML
@@ -69,12 +71,14 @@ public class ArticuloController implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colImporte.setCellValueFactory(new PropertyValueFactory<>("importe"));
+        colPCompra.setCellValueFactory(new PropertyValueFactory<>("precioCompra"));
+        colPVenta.setCellValueFactory(new PropertyValueFactory<>("precioVenta"));
         colObservacion.setCellValueFactory(new PropertyValueFactory<>("observacion"));
 
         instance = this;
         //btnArticulo.setOnAction(e -> MainApp.showMe(2));
         btnAdd.setOnAction(e -> new ArticuloDialog().add());
+        btnEdit.setOnAction(e -> new ArticuloDialogController().edit(articulo));
 
         InitService();
         loadDatabaseData();
@@ -114,7 +118,7 @@ public class ArticuloController implements Initializable {
         try {
             //int id = table.getSelectionModel().getSelectedItem().getId();
             articulo = jpaArticulo.findArticulo(table.getSelectionModel().getSelectedItem().getId());
-            System.out.println("Articulo: " + articulo.toString());
+            System.out.println("Articulo: " + articulo.toString() + " pc: " +articulo.getPrecioCompra() + " pv: " + articulo.getPrecioVenta());
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -132,26 +136,6 @@ public class ArticuloController implements Initializable {
             System.out.println(e);
         }
         loadDatabaseData();
-    }
-
-    @FXML
-    public void Update() {
-        System.out.println("ar.nex.syscontrol.config.ConfigController.Update()");
-        try {
-
-//            //  UpdatePendiente(articulo);
-//            articulo.setNombre(boxNombre.getText());
-//            articulo.setImporte(Double.parseDouble(boxImporte.getText().replace(",", ".")));
-//            articulo.setObservacion(boxComentario.getText());
-//            jpaArticulo.edit(articulo);
-//            MainApp.showInformationAlertBox("CajaMovTipo '" + boxNombre.getText() + "' Updated Successfully!");
-//
-//            //UpdatePendiente(articulo);
-//            historial.GuardarEvento("El Articulo " + articulo.toString() + " fue Actualizado.");
-//            loadDatabaseData();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     @FXML
