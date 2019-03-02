@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ar.nex.stock;
+package ar.nex.jpa;
 
-import ar.nex.articulo.exceptions.NonexistentEntityException;
+import ar.nex.jpa.exceptions.NonexistentEntityException;
+import ar.nex.jpa.exceptions.PreexistingEntityException;
+import ar.nex.stock.Historia;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
+import ar.nex.stock.Stock;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -31,26 +33,27 @@ public class HistoriaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Historia historia) {
-        if (historia.getStockList() == null) {
-            historia.setStockList(new ArrayList<Stock>());
-        }
+    public void create(Historia historia) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Stock> attachedStockList = new ArrayList<Stock>();
-            for (Stock stockListStockToAttach : historia.getStockList()) {
-                stockListStockToAttach = em.getReference(stockListStockToAttach.getClass(), stockListStockToAttach.getId());
-                attachedStockList.add(stockListStockToAttach);
+            Stock stock = historia.getStock();
+            if (stock != null) {
+                stock = em.getReference(stock.getClass(), stock.getId());
+                historia.setStock(stock);
             }
-            historia.setStockList(attachedStockList);
             em.persist(historia);
-            for (Stock stockListStock : historia.getStockList()) {
-                stockListStock.getHistoriaList().add(historia);
-                stockListStock = em.merge(stockListStock);
+            if (stock != null) {
+                stock.getHistoriaList().add(historia);
+                stock = em.merge(stock);
             }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findHistoria(historia.getId()) != null) {
+                throw new PreexistingEntityException("Historia " + historia + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -64,27 +67,20 @@ public class HistoriaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Historia persistentHistoria = em.find(Historia.class, historia.getId());
-            List<Stock> stockListOld = persistentHistoria.getStockList();
-            List<Stock> stockListNew = historia.getStockList();
-            List<Stock> attachedStockListNew = new ArrayList<Stock>();
-            for (Stock stockListNewStockToAttach : stockListNew) {
-                stockListNewStockToAttach = em.getReference(stockListNewStockToAttach.getClass(), stockListNewStockToAttach.getId());
-                attachedStockListNew.add(stockListNewStockToAttach);
+            Stock stockOld = persistentHistoria.getStock();
+            Stock stockNew = historia.getStock();
+            if (stockNew != null) {
+                stockNew = em.getReference(stockNew.getClass(), stockNew.getId());
+                historia.setStock(stockNew);
             }
-            stockListNew = attachedStockListNew;
-            historia.setStockList(stockListNew);
             historia = em.merge(historia);
-            for (Stock stockListOldStock : stockListOld) {
-                if (!stockListNew.contains(stockListOldStock)) {
-                    stockListOldStock.getHistoriaList().remove(historia);
-                    stockListOldStock = em.merge(stockListOldStock);
-                }
+            if (stockOld != null && !stockOld.equals(stockNew)) {
+                stockOld.getHistoriaList().remove(historia);
+                stockOld = em.merge(stockOld);
             }
-            for (Stock stockListNewStock : stockListNew) {
-                if (!stockListOld.contains(stockListNewStock)) {
-                    stockListNewStock.getHistoriaList().add(historia);
-                    stockListNewStock = em.merge(stockListNewStock);
-                }
+            if (stockNew != null && !stockNew.equals(stockOld)) {
+                stockNew.getHistoriaList().add(historia);
+                stockNew = em.merge(stockNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -115,10 +111,10 @@ public class HistoriaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The historia with id " + id + " no longer exists.", enfe);
             }
-            List<Stock> stockList = historia.getStockList();
-            for (Stock stockListStock : stockList) {
-                stockListStock.getHistoriaList().remove(historia);
-                stockListStock = em.merge(stockListStock);
+            Stock stock = historia.getStock();
+            if (stock != null) {
+                stock.getHistoriaList().remove(historia);
+                stock = em.merge(stock);
             }
             em.remove(historia);
             em.getTransaction().commit();

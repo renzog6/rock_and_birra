@@ -3,7 +3,6 @@ package ar.nex.app;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
@@ -76,33 +75,9 @@ public class MainApp extends Application {
         mainLayout.setCenter(mainItems);
     }
 
-    public static void showPartidos() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/partido/Partido.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showAddArticuloCliente() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/caja/ArticuloAddCliente.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
     public static void showClientes() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Cliente.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showCajaMovClientes() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/caja/CajaMovCliente.fxml"));
         BorderPane mainItems = loader.load();
         //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
         mainLayout.setCenter(mainItems);

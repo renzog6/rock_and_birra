@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ar.nex.app.MainApp;
+import ar.nex.jpa.ArticuloJpaController;
 import ar.nex.syscontrol.config.HistorialService;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -23,6 +26,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javax.persistence.Persistence;
 
 public class ArticuloController implements Initializable {
@@ -59,11 +64,11 @@ public class ArticuloController implements Initializable {
     TextField searchBox;
 
     private ArticuloJpaController jpaArticulo;
-
     private Articulo articulo;
-    
+
     private static ArticuloController instance;
-    public static ArticuloController getInstance(){
+
+    public static ArticuloController getInstance() {
         return instance;
     }
 
@@ -76,9 +81,9 @@ public class ArticuloController implements Initializable {
         colObservacion.setCellValueFactory(new PropertyValueFactory<>("observacion"));
 
         instance = this;
-        //btnArticulo.setOnAction(e -> MainApp.showMe(2));
-        btnAdd.setOnAction(e -> new ArticuloDialog().add());
-        btnEdit.setOnAction(e -> new ArticuloDialogController().edit(articulo));
+
+        btnAdd.setOnAction(e -> this.add());
+        btnEdit.setOnAction(e -> this.edit());
 
         InitService();
         loadDatabaseData();
@@ -118,7 +123,7 @@ public class ArticuloController implements Initializable {
         try {
             //int id = table.getSelectionModel().getSelectedItem().getId();
             articulo = jpaArticulo.findArticulo(table.getSelectionModel().getSelectedItem().getId());
-            System.out.println("Articulo: " + articulo.toString() + " pc: " +articulo.getPrecioCompra() + " pv: " + articulo.getPrecioVenta());
+            System.out.println("Articulo: " + articulo.toString() + " pc: " + articulo.getPrecioCompra() + " pv: " + articulo.getPrecioVenta());
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -169,6 +174,33 @@ public class ArticuloController implements Initializable {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void add() {
+        articulo = new Articulo();
+        edit();
+    }
+
+    public void edit() {
+        System.out.println("ar.nex.articulo.ArticuloDialog.edit() : " + articulo.toString());
+        try {
+            Stage dialog = new Stage();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ArticuloDialog.fxml"));
+            ArticuloDialogController controller = new ArticuloDialogController(articulo);
+            loader.setController(controller);
+
+            Scene scene = new Scene(loader.load());
+
+            dialog.setScene(scene);
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.resizableProperty().setValue(Boolean.FALSE);
+
+            dialog.showAndWait();
+
+        } catch (IOException e) {
+            System.err.print(e);
         }
     }
 

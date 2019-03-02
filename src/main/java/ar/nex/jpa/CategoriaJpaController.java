@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ar.nex.articulo;
+package ar.nex.jpa;
 
-import ar.nex.articulo.exceptions.NonexistentEntityException;
-import ar.nex.articulo.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import ar.nex.articulo.Articulo;
+import ar.nex.articulo.Categoria;
+import ar.nex.jpa.exceptions.NonexistentEntityException;
+import ar.nex.jpa.exceptions.PreexistingEntityException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;

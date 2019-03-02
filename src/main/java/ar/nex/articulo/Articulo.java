@@ -1,6 +1,5 @@
 package ar.nex.articulo;
 
-
 import ar.nex.compra.Proveedor;
 import ar.nex.compra.Compra;
 import ar.nex.stock.Stock;
@@ -9,6 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -43,11 +44,12 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Articulo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id")        
     private Integer id;
+
     @Column(name = "codigo")
     private String codigo;
     @Column(name = "nombre")
@@ -63,22 +65,30 @@ public class Articulo implements Serializable {
     private Integer compraVenta;
     @Column(name = "otro")
     private Integer otro;
+
     @JoinTable(name = "articulo_proveedor", joinColumns = {
         @JoinColumn(name = "articulo", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "proveedor", referencedColumnName = "id")})
     @ManyToMany
     private List<Proveedor> proveedorList;
+
     @OneToMany(mappedBy = "articuloID")
     private List<Compra> compraList;
+
     @OneToMany(mappedBy = "articuloID")
     private List<Venta> ventaList;
+
     @JoinColumn(name = "categoriaID", referencedColumnName = "id")
     @ManyToOne
     private Categoria categoriaID;
-    @OneToMany(mappedBy = "articuloID")
-    private List<Stock> stockList;
+
+//    @OneToMany(mappedBy = "articuloID")
+//    private List<Stock> stockList;
+    @OneToOne(mappedBy = "articulo", cascade = CascadeType.ALL)
+    private Stock stock;
 
     public Articulo() {
+        this.id = 0;
     }
 
     public Articulo(Integer id) {
@@ -184,13 +194,30 @@ public class Articulo implements Serializable {
         this.categoriaID = categoriaID;
     }
 
-    @XmlTransient
-    public List<Stock> getStockList() {
-        return stockList;
+//    @XmlTransient
+//    public List<Stock> getStockList() {
+//        return stockList;
+//    }
+//
+//    public void setStockList(List<Stock> stockList) {
+//        this.stockList = stockList;
+//    }
+    public Stock getStock() {
+        return stock;
     }
 
-    public void setStockList(List<Stock> stockList) {
-        this.stockList = stockList;
+//    public void setStock(Stock stock) {
+//        this.stock = stock;
+//    }
+    public void setStock(Stock stock) {
+        if (stock == null) {
+            if (this.stock != null) {
+                this.stock.setArticulo(null);
+            }
+        } else {
+            stock.setArticulo(this);
+        }
+        this.stock = stock;
     }
 
     @Override
@@ -226,11 +253,9 @@ public class Articulo implements Serializable {
         return true;
     }
 
-
-
     @Override
     public String toString() {
-        return "ar.nex.articulo.Articulo[ id=" + id + " ]";
+        return codigo + " - " + nombre;
     }
-    
+
 }

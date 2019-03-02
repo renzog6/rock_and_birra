@@ -1,14 +1,8 @@
 package ar.nex.syscontrol.utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ChoiceDialog;
 
 /**
  *

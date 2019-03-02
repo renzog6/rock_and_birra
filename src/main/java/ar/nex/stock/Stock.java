@@ -1,24 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ar.nex.stock;
 
+import ar.nex.articulo.Articulo;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,22 +39,31 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Stock implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id")    
     private Integer id;
+
     @Column(name = "fecha")
     private String fecha;
     @Column(name = "cantidad")
     private Integer cantidad;
-    @ManyToMany(mappedBy = "stockList")
+
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)    
     private List<Historia> historiaList;
+
+    @OneToOne
     @JoinColumn(name = "articuloID", referencedColumnName = "id")
-    @ManyToOne
-    private ar.nex.articulo.Articulo articuloID;
+    private Articulo articulo;
+
+    public void addHistoria(Historia historia) {
+        historiaList.add(historia);
+        historia.setStock(this);
+    }
 
     public Stock() {
+        historiaList = new ArrayList<>();
     }
 
     public Stock(Integer id) {
@@ -92,12 +103,19 @@ public class Stock implements Serializable {
         this.historiaList = historiaList;
     }
 
-    public ar.nex.articulo.Articulo getArticuloID() {
-        return articuloID;
+//    public ar.nex.articulo.Articulo getArticuloID() {
+//        return articuloID;
+//    }
+//
+//    public void setArticuloID(ar.nex.articulo.Articulo articuloID) {
+//        this.articuloID = articuloID;
+//    }
+    public Articulo getArticulo() {
+        return articulo;
     }
 
-    public void setArticuloID(ar.nex.articulo.Articulo articuloID) {
-        this.articuloID = articuloID;
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
     }
 
     @Override
@@ -124,5 +142,5 @@ public class Stock implements Serializable {
     public String toString() {
         return "ar.nex.articulo.Stock[ id=" + id + " ]";
     }
-    
+
 }

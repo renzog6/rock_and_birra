@@ -32,21 +32,6 @@ public class MainMenuController implements Initializable {
     @FXML
     Label lblUser;
 
-    @FXML
-    public void goCajaMovCliente() throws IOException {
-        System.out.println("ar.nex.syscontrol.MainMenuController.goClientes()");
-        try {
-            boolean isLogin = true;
-            if (isLogin) {
-                MainApp.showCajaMovClientes();
-            } else {
-                System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            }
-        } catch (Exception e) {
-            System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void goClientes() throws IOException {

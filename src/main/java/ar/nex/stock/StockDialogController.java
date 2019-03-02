@@ -1,8 +1,9 @@
-package ar.nex.articulo;
+package ar.nex.stock;
 
 import ar.nex.app.MainApp;
-import ar.nex.jpa.ArticuloJpaController;
-import ar.nex.stock.StockController;
+import ar.nex.articulo.Articulo;
+import ar.nex.articulo.ArticuloController;
+import ar.nex.jpa.StockJpaController;
 import ar.nex.util.GetPK;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,17 +25,7 @@ import javax.persistence.Persistence;
  *
  * @author Renzo
  */
-public class ArticuloDialogController implements Initializable {
-
-    public ArticuloDialogController() {
-    }
-
-    public ArticuloDialogController(Articulo a) {
-        System.out.println("ar.nex.articulo.ArticuloDialogController.<init>() : " + a.toString());
-        this.articulo = a;
-    }
-
-    private Articulo articulo;
+public class StockDialogController implements Initializable {
 
     @FXML
     private Button btnGuardar;
@@ -61,6 +52,7 @@ public class ArticuloDialogController implements Initializable {
     @FXML
     private RadioButton rbNo;
 
+    //private ArticuloDialog ad;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(new Runnable() {
@@ -69,6 +61,10 @@ public class ArticuloDialogController implements Initializable {
                 boxCodigo.requestFocus();
             }
         });
+
+        boxCompra.setText("0.0");
+        boxVenta.setText("0.0");
+        boxStock.setText("0");
 
         btnCancelar.setOnAction(e -> ((Node) (e.getSource())).getScene().getWindow().hide());
 
@@ -88,41 +84,15 @@ public class ArticuloDialogController implements Initializable {
             }
         });
 
-        InitControls();
         InitService();
     }
 
-    private ArticuloJpaController jpaArticulo;
+    private StockJpaController jpaStock;
 
     public void InitService() {
         System.out.println("ar.nex.articulo.ArticuloController.InitService()");
         try {
-            jpaArticulo = new ArticuloJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void InitControls() {
-        try {
-            boxCodigo.setText(articulo.getCodigo());
-            boxNombre.setText(articulo.getNombre());
-            boxCompra.setText(articulo.getPrecioCompra().toString());
-            boxVenta.setText(articulo.getPrecioVenta().toString());
-
-            if (articulo.getId() == 0) {
-                boxStock.setText("0");
-            } else {
-                boxStock.setText(articulo.getStock().getCantidad().toString());
-                boxStock.setDisable(true);
-            }
-            
-            if (articulo.getCompraVenta() == 0) {
-                rbSi.setSelected(true);
-            } else {
-                rbNo.setSelected(true);
-            }
-
+            jpaStock = new StockJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +106,10 @@ public class ArticuloDialogController implements Initializable {
     @FXML
     public void guardar(ActionEvent event) {
         System.out.println("ar.nex.articulo.ArticuloDialogController.guardar()");
+        GetPK pk = new GetPK();
         try {
+            Articulo articulo = new Articulo();
+            articulo.setId(pk.Nuevo(Articulo.class));
 
             articulo.setCodigo(boxCodigo.getText());
             articulo.setNombre(boxNombre.getText());
@@ -144,16 +117,10 @@ public class ArticuloDialogController implements Initializable {
             articulo.setPrecioVenta(Double.parseDouble(boxVenta.getText().replace(",", ".")));
             articulo.setObservacion(boxObservacion.getText());
 
-            if (articulo.getId() == 0) {
-                GetPK pk = new GetPK();
-                articulo.setId(pk.Nuevo(Articulo.class));
-                ArticuloController.getInstance().getService().create(articulo);
-
-                new StockController().crearStock(articulo, Integer.valueOf(boxStock.getText()));
-            } else {
-                ArticuloController.getInstance().getService().edit(articulo);
-            }
-
+            ArticuloController.getInstance().getService().create(articulo);
+          
+            new StockController().crearStock(articulo, Integer.valueOf(boxStock.getText()));                             
+                        
         } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();

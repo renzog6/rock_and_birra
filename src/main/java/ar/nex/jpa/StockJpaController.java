@@ -3,15 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ar.nex.stock;
+package ar.nex.jpa;
 
-import ar.nex.articulo.Articulo;
-import ar.nex.stock.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import ar.nex.articulo.Articulo;
+import ar.nex.jpa.exceptions.NonexistentEntityException;
+import ar.nex.jpa.exceptions.PreexistingEntityException;
+import ar.nex.stock.Historia;
+import ar.nex.stock.Stock;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -32,7 +35,7 @@ public class StockJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Stock stock) {
+    public void create(Stock stock) throws PreexistingEntityException, Exception {
         if (stock.getHistoriaList() == null) {
             stock.setHistoriaList(new ArrayList<Historia>());
         }
@@ -40,10 +43,10 @@ public class StockJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Articulo articuloID = stock.getArticuloID();
-            if (articuloID != null) {
-                articuloID = em.getReference(articuloID.getClass(), articuloID.getId());
-                stock.setArticuloID(articuloID);
+            Articulo articulo = stock.getArticulo();
+            if (articulo != null) {
+                articulo = em.getReference(articulo.getClass(), articulo.getId());
+                stock.setArticulo(articulo);
             }
             List<Historia> attachedHistoriaList = new ArrayList<Historia>();
             for (Historia historiaListHistoriaToAttach : stock.getHistoriaList()) {
@@ -52,15 +55,30 @@ public class StockJpaController implements Serializable {
             }
             stock.setHistoriaList(attachedHistoriaList);
             em.persist(stock);
-            if (articuloID != null) {
-                articuloID.getStockList().add(stock);
-                articuloID = em.merge(articuloID);
+            if (articulo != null) {
+                Stock oldStockOfArticulo = articulo.getStock();
+                if (oldStockOfArticulo != null) {
+                    oldStockOfArticulo.setArticulo(null);
+                    oldStockOfArticulo = em.merge(oldStockOfArticulo);
+                }
+                articulo.setStock(stock);
+                articulo = em.merge(articulo);
             }
             for (Historia historiaListHistoria : stock.getHistoriaList()) {
-                historiaListHistoria.getStockList().add(stock);
+                Stock oldStockOfHistoriaListHistoria = historiaListHistoria.getStock();
+                historiaListHistoria.setStock(stock);
                 historiaListHistoria = em.merge(historiaListHistoria);
+                if (oldStockOfHistoriaListHistoria != null) {
+                    oldStockOfHistoriaListHistoria.getHistoriaList().remove(historiaListHistoria);
+                    oldStockOfHistoriaListHistoria = em.merge(oldStockOfHistoriaListHistoria);
+                }
             }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findStock(stock.getId()) != null) {
+                throw new PreexistingEntityException("Stock " + stock + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -74,13 +92,13 @@ public class StockJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Stock persistentStock = em.find(Stock.class, stock.getId());
-            Articulo articuloIDOld = persistentStock.getArticuloID();
-            Articulo articuloIDNew = stock.getArticuloID();
+            Articulo articuloOld = persistentStock.getArticulo();
+            Articulo articuloNew = stock.getArticulo();
             List<Historia> historiaListOld = persistentStock.getHistoriaList();
             List<Historia> historiaListNew = stock.getHistoriaList();
-            if (articuloIDNew != null) {
-                articuloIDNew = em.getReference(articuloIDNew.getClass(), articuloIDNew.getId());
-                stock.setArticuloID(articuloIDNew);
+            if (articuloNew != null) {
+                articuloNew = em.getReference(articuloNew.getClass(), articuloNew.getId());
+                stock.setArticulo(articuloNew);
             }
             List<Historia> attachedHistoriaListNew = new ArrayList<Historia>();
             for (Historia historiaListNewHistoriaToAttach : historiaListNew) {
@@ -90,24 +108,34 @@ public class StockJpaController implements Serializable {
             historiaListNew = attachedHistoriaListNew;
             stock.setHistoriaList(historiaListNew);
             stock = em.merge(stock);
-            if (articuloIDOld != null && !articuloIDOld.equals(articuloIDNew)) {
-                articuloIDOld.getStockList().remove(stock);
-                articuloIDOld = em.merge(articuloIDOld);
+            if (articuloOld != null && !articuloOld.equals(articuloNew)) {
+                articuloOld.setStock(null);
+                articuloOld = em.merge(articuloOld);
             }
-            if (articuloIDNew != null && !articuloIDNew.equals(articuloIDOld)) {
-                articuloIDNew.getStockList().add(stock);
-                articuloIDNew = em.merge(articuloIDNew);
+            if (articuloNew != null && !articuloNew.equals(articuloOld)) {
+                Stock oldStockOfArticulo = articuloNew.getStock();
+                if (oldStockOfArticulo != null) {
+                    oldStockOfArticulo.setArticulo(null);
+                    oldStockOfArticulo = em.merge(oldStockOfArticulo);
+                }
+                articuloNew.setStock(stock);
+                articuloNew = em.merge(articuloNew);
             }
             for (Historia historiaListOldHistoria : historiaListOld) {
                 if (!historiaListNew.contains(historiaListOldHistoria)) {
-                    historiaListOldHistoria.getStockList().remove(stock);
+                    historiaListOldHistoria.setStock(null);
                     historiaListOldHistoria = em.merge(historiaListOldHistoria);
                 }
             }
             for (Historia historiaListNewHistoria : historiaListNew) {
                 if (!historiaListOld.contains(historiaListNewHistoria)) {
-                    historiaListNewHistoria.getStockList().add(stock);
+                    Stock oldStockOfHistoriaListNewHistoria = historiaListNewHistoria.getStock();
+                    historiaListNewHistoria.setStock(stock);
                     historiaListNewHistoria = em.merge(historiaListNewHistoria);
+                    if (oldStockOfHistoriaListNewHistoria != null && !oldStockOfHistoriaListNewHistoria.equals(stock)) {
+                        oldStockOfHistoriaListNewHistoria.getHistoriaList().remove(historiaListNewHistoria);
+                        oldStockOfHistoriaListNewHistoria = em.merge(oldStockOfHistoriaListNewHistoria);
+                    }
                 }
             }
             em.getTransaction().commit();
@@ -139,14 +167,14 @@ public class StockJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The stock with id " + id + " no longer exists.", enfe);
             }
-            Articulo articuloID = stock.getArticuloID();
-            if (articuloID != null) {
-                articuloID.getStockList().remove(stock);
-                articuloID = em.merge(articuloID);
+            Articulo articulo = stock.getArticulo();
+            if (articulo != null) {
+                articulo.setStock(null);
+                articulo = em.merge(articulo);
             }
             List<Historia> historiaList = stock.getHistoriaList();
             for (Historia historiaListHistoria : historiaList) {
-                historiaListHistoria.getStockList().remove(stock);
+                historiaListHistoria.setStock(null);
                 historiaListHistoria = em.merge(historiaListHistoria);
             }
             em.remove(stock);

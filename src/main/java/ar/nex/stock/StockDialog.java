@@ -1,6 +1,8 @@
-package ar.nex.articulo;
+package ar.nex.stock;
 
+import ar.nex.app.MainApp;
 import java.io.IOException;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -10,13 +12,13 @@ import javafx.stage.Stage;
  *
  * @author Renzo
  */
-public class ArticuloDialog {
+public class StockDialog {
 
     public int add() {
         System.out.println("ar.nex.articulo.ArticuloDialog.add()");
         try {
             Stage dialog = new Stage();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/ArticuloDialog.fxml")));
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/stock/StockDialog.fxml")));
 
             dialog.setScene(scene);
            //dialog.initOwner(MainApp.stage);
@@ -37,7 +39,7 @@ public class ArticuloDialog {
         System.out.println("ar.nex.articulo.ArticuloDialog.edit()");
         try {
             Stage dialog = new Stage();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/ArticuloDialog.fxml")));
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/stock/StockDialog.fxml")));
 
             dialog.setScene(scene);
            // dialog.initOwner(MainApp.stage);

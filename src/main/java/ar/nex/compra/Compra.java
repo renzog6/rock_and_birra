@@ -54,8 +54,10 @@ public class Compra implements Serializable {
     @Column(name = "observacion")
     private String observacion;
     @JoinColumn(name = "articuloID", referencedColumnName = "id")
+    
     @ManyToOne
     private Articulo articuloID;
+    
     @JoinColumn(name = "proveedorID", referencedColumnName = "id")
     @ManyToOne
     private Proveedor proveedorID;
