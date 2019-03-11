@@ -7,6 +7,7 @@ import ar.nex.jpa.StockJpaController;
 import ar.nex.util.GetPK;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -16,16 +17,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javax.persistence.Persistence;
 
 /**
@@ -50,9 +53,6 @@ public class StockController implements Initializable {
     @FXML
     private Label lblHistoriaSelect;
 
-    @FXML
-    private MenuItem update;
-
     ObservableList<Stock> data = FXCollections.observableArrayList();
     FilteredList<Stock> filteredData = new FilteredList<>(data);
     @FXML
@@ -75,9 +75,9 @@ public class StockController implements Initializable {
     @FXML
     private TableColumn<?, ?> colHCantidad;
 
-    private StockJpaController jpaStock;    
+    private StockJpaController jpaStock;
     private Stock selectStock;
-    
+
     private HistoriaJpaController jpaHistoria;
     private Historia selectHistoria;
 
@@ -92,6 +92,9 @@ public class StockController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        selectStock = null;
+        selectHistoria = null;
 
         btnBack.setOnAction(e -> {
             try {
@@ -110,6 +113,10 @@ public class StockController implements Initializable {
 
         InitService();
         loadDataStock();
+
+        btnMas.setOnAction(e -> editarStock(true));
+        btnMenos.setOnAction(e -> editarStock(false));
+
     }
 
     public void InitService() {
@@ -147,6 +154,7 @@ public class StockController implements Initializable {
         try {
             this.dataHistoria.clear();
             List<Historia> lst = s.getHistoriaList();
+            Collections.reverse(lst); 
             for (Historia item : lst) {
                 this.dataHistoria.add(item);
                 this.tableHistoria.setItems(dataHistoria);
@@ -157,7 +165,7 @@ public class StockController implements Initializable {
         }
     }
 
-    public void crearStock(Articulo articulo, Integer cantidad) {
+    public void crearStock(Articulo articulo, String fecha, Integer cantidad) {
         System.out.println("ar.nex.stock.StockController.crearStock() ---- " + articulo.toString());
         GetPK pk = new GetPK();
         try {
@@ -165,7 +173,7 @@ public class StockController implements Initializable {
             Stock stock = new Stock();
             stock.setId(pk.Nuevo(Stock.class));
 
-            stock.setFecha("hoy");
+            stock.setFecha(fecha);
             stock.setArticulo(articulo);
             stock.setCantidad(cantidad);
 
@@ -184,8 +192,31 @@ public class StockController implements Initializable {
 
     }
 
-    @FXML
-    private void Update(ActionEvent event) {
+    public void editarStock(boolean suma) {
+        System.out.println("ar.nex.stock.StockController.editarStock()");
+        try {
+            if (selectStock != null) {
+
+                Stage dialog = new Stage();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stock/StockEditar.fxml"));
+                StockEditar controller = new StockEditar(selectStock, suma);
+                loader.setController(controller);
+
+                Scene scene = new Scene(loader.load());
+
+                dialog.setScene(scene);
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                dialog.resizableProperty().setValue(Boolean.FALSE);
+
+                dialog.showAndWait();
+
+                loadDataStock();
+                loadDataHistoria(jpaStock.findStock(selectStock.getId()));
+            }
+        } catch (Exception e) {
+            System.err.print(e);
+        }
     }
 
     @FXML

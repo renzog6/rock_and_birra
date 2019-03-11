@@ -6,9 +6,8 @@
 package ar.nex.compra;
 
 import ar.nex.articulo.Articulo;
-import ar.nex.compra.Compra;
-import ar.nex.articulo.exceptions.NonexistentEntityException;
-import ar.nex.articulo.exceptions.PreexistingEntityException;
+import ar.nex.compra.exceptions.NonexistentEntityException;
+import ar.nex.compra.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -186,7 +185,7 @@ public class ProveedorJpaController implements Serializable {
         }
     }
 
-    public List<Proveedor> findProveedorEntities() {
+    public List<Proveedor> findProveedorEntities() {        
         return findProveedorEntities(true, -1, -1);
     }
 

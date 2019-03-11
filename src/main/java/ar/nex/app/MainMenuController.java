@@ -22,6 +22,8 @@ public class MainMenuController implements Initializable {
     @FXML
     Button btnStock;
     @FXML
+    Button btnProveedor;
+    @FXML
     Button btnClientes;
     @FXML
     Button btnCaja;
@@ -31,7 +33,6 @@ public class MainMenuController implements Initializable {
     Button btnHistorial;
     @FXML
     Label lblUser;
-
 
     @FXML
     public void goClientes() throws IOException {
@@ -76,7 +77,6 @@ public class MainMenuController implements Initializable {
         }
     }
 
-
     /**
      * Initializes the controller class.
      */
@@ -85,6 +85,7 @@ public class MainMenuController implements Initializable {
 
         btnArticulo.setOnAction(e -> MainApp.showMe(2));
         btnStock.setOnAction(e -> MainApp.showMe(3));
+        btnProveedor.setOnAction(e -> MainApp.showMe(4));
         btnHistorial.setOnAction(e -> MainApp.showMe(11));
         lblUser.setText("Usuario [ " + LoginController.getUserLogin().getName() + " ]");
     }

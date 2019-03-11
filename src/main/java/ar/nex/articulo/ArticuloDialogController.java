@@ -5,6 +5,7 @@ import ar.nex.jpa.ArticuloJpaController;
 import ar.nex.stock.StockController;
 import ar.nex.util.GetPK;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
@@ -53,6 +55,8 @@ public class ArticuloDialogController implements Initializable {
     private TextField boxStock;
     @FXML
     private TextField boxObservacion;
+    @FXML 
+    private DatePicker boxFecha;
 
     @FXML
     private ToggleGroup group;
@@ -122,6 +126,8 @@ public class ArticuloDialogController implements Initializable {
             } else {
                 rbNo.setSelected(true);
             }
+            
+            boxFecha.setValue(LocalDate.now());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,8 +155,8 @@ public class ArticuloDialogController implements Initializable {
                 articulo.setId(pk.Nuevo(Articulo.class));
                 ArticuloController.getInstance().getService().create(articulo);
 
-                new StockController().crearStock(articulo, Integer.valueOf(boxStock.getText()));
-            } else {
+                new StockController().crearStock(articulo, boxFecha.getValue().toString(),Integer.valueOf(boxStock.getText()));
+            } else {                
                 ArticuloController.getInstance().getService().edit(articulo);
             }
 

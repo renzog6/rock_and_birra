@@ -15,8 +15,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-          
-        
+
         MainApp.stage = stage;
         MainApp.stage.setTitle("Rock & Birra");
         MainApp.stage.setMaximized(true);
@@ -42,6 +41,9 @@ public class MainApp extends Application {
                 case 3:
                     loader.setLocation(MainApp.class.getResource("/fxml/stock/Stock.fxml"));
                     break;
+                case 4:
+                    loader.setLocation(MainApp.class.getResource("/fxml/compra/Proveedor.fxml"));
+                    break;
                 case 11:
                     loader.setLocation(MainApp.class.getResource("/fxml/config/HistorialDetalle.fxml"));
                     break;
@@ -66,7 +68,7 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    
+
     public static void showMainMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/MainMenu.fxml"));

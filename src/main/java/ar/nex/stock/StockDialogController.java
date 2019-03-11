@@ -119,7 +119,7 @@ public class StockDialogController implements Initializable {
 
             ArticuloController.getInstance().getService().create(articulo);
           
-            new StockController().crearStock(articulo, Integer.valueOf(boxStock.getText()));                             
+            new StockController().crearStock(articulo, "fecha",Integer.valueOf(boxStock.getText()));                             
                         
         } catch (Exception e) {
             System.out.println(e);

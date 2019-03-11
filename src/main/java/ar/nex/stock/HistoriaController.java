@@ -3,6 +3,7 @@ package ar.nex.stock;
 import ar.nex.jpa.HistoriaJpaController;
 import ar.nex.util.GetPK;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -95,11 +96,33 @@ public class HistoriaController implements Initializable {
 
             historia = new Historia();
             historia.setId(pk.Nuevo(Historia.class));
-            
+
             historia.setStock(stock);
-            historia.setFecha("hoy");
+            historia.setFecha(LocalDate.now().toString());
             historia.setEvento("Nuevo Articulo creado");
             historia.setCantidad(stock.getCantidad());
+
+            this.InitService();
+            jpaHistoria.create(historia);
+        } catch (Exception ex) {
+            Logger.getLogger(HistoriaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void editarHistoria(Stock stock, String fecha, String detalle, int cantidad) {
+    
+        System.out.println("ar.nex.stock.HistoriaController.editarHistoria()");
+        GetPK pk = new GetPK();
+        try {
+
+            historia = new Historia();
+            historia.setId(pk.Nuevo(Historia.class));
+
+            historia.setStock(stock);
+            historia.setFecha(fecha);
+            historia.setEvento("Detalle : " + detalle);
+            historia.setCantidad(cantidad);
 
             this.InitService();
             jpaHistoria.create(historia);

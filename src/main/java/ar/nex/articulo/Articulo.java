@@ -47,7 +47,7 @@ public class Articulo implements Serializable {
 
     @Id
     @Basic(optional = false)
-    @Column(name = "id")        
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "codigo")
@@ -89,6 +89,13 @@ public class Articulo implements Serializable {
 
     public Articulo() {
         this.id = 0;
+        this.codigo = "";
+        this.nombre = "";
+        this.precioCompra = 0.0;
+        this.precioVenta = 0.0;
+        this.observacion = "";
+        this.compraVenta = 0;
+        this.otro = 0;
     }
 
     public Articulo(Integer id) {
