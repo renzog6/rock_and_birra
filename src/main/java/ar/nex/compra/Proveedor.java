@@ -56,6 +56,12 @@ public class Proveedor implements Serializable {
     private List<Compra> compraList;
 
     public Proveedor() {
+        this.id = 0;
+        this.nombre = "";
+        this.cuit = "";
+        this.telefono = "";
+        this.direccion = "";
+        this.observacion = "";
     }
 
     public Proveedor(Integer id) {

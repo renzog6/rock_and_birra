@@ -32,25 +32,24 @@ public class StockDialogController implements Initializable {
     @FXML
     private Button btnCancelar;
 
-    @FXML
     private TextField boxCodigo;
     @FXML
     private TextField boxNombre;
-    @FXML
     private TextField boxCompra;
-    @FXML
     private TextField boxVenta;
-    @FXML
     private TextField boxStock;
     @FXML
     private TextField boxObservacion;
 
-    @FXML
     private ToggleGroup group;
-    @FXML
     private RadioButton rbSi;
-    @FXML
     private RadioButton rbNo;
+    @FXML
+    private TextField boxCuit;
+    @FXML
+    private TextField boxTelefono;
+    @FXML
+    private TextField boxDireccion;
 
     //private ArticuloDialog ad;
     @Override
