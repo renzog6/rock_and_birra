@@ -18,6 +18,8 @@ import javafx.scene.control.Label;
 public class MainMenuController implements Initializable {
 
     @FXML
+    Button btnCaja;
+    @FXML
     Button btnArticulo;
     @FXML
     Button btnStock;
@@ -26,7 +28,7 @@ public class MainMenuController implements Initializable {
     @FXML
     Button btnClientes;
     @FXML
-    Button btnCaja;
+    Button btnCompra;
     @FXML
     Button btnConfig;
     @FXML
@@ -34,50 +36,7 @@ public class MainMenuController implements Initializable {
     @FXML
     Label lblUser;
 
-    @FXML
-    public void goClientes() throws IOException {
-        System.out.println("ar.nex.syscontrol.MainMenuController.goClientes()");
-        try {
-            boolean isLogin = true;
-            if (isLogin) {
-                MainApp.showClientes();
-            } else {
-                System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            }
-        } catch (Exception e) {
-            System.out.println("ar.nex.syscontrol.MainMenuController.goSignIn(): ERROR");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void goConfig() throws IOException {
-        System.out.println("ar.nex.syscontrol.MainMenuController.goConfig()");
-        try {
-            if (LoginController.isAdmin()) {
-                MainApp.showConfig();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error!!!");
-                alert.setContentText("Solo en Administrador puede ingresar!!!");
-                alert.showAndWait();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void goCaja() throws IOException {
-        try {
-            System.out.println("ar.nex.syscontrol.MainMenuController.goConfig()");
-            MainApp.showCaja();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
+       /**
      * Initializes the controller class.
      */
     @Override
@@ -85,9 +44,13 @@ public class MainMenuController implements Initializable {
 
         btnArticulo.setOnAction(e -> MainApp.showMe(2));
         btnStock.setOnAction(e -> MainApp.showMe(3));
+        
         btnProveedor.setOnAction(e -> MainApp.showMe(4));
+        btnCompra.setOnAction(e -> MainApp.showMe(5));
+        
         btnHistorial.setOnAction(e -> MainApp.showMe(11));
-        lblUser.setText("Usuario [ " + LoginController.getUserLogin().getName() + " ]");
+        
+//        lblUser.setText("Usuario [ " + LoginController.getUserLogin().getName() + " ]");
     }
 
 }

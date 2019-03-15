@@ -5,7 +5,6 @@ import ar.nex.articulo.Articulo;
 import ar.nex.jpa.HistoriaJpaController;
 import ar.nex.jpa.StockJpaController;
 import ar.nex.util.GetPK;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +38,7 @@ import javax.persistence.Persistence;
 public class StockController implements Initializable {
 
     @FXML
-    private Button btnBack;
+    private Button btnMenu;
     @FXML
     private Button btnMas;
     @FXML
@@ -93,16 +92,10 @@ public class StockController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        StockController.instance = this;
+        
         selectStock = null;
         selectHistoria = null;
-
-        btnBack.setOnAction(e -> {
-            try {
-                MainApp.showMainMenu();
-            } catch (IOException ex) {
-                Logger.getLogger(StockController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
 
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         colArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
@@ -116,6 +109,7 @@ public class StockController implements Initializable {
 
         btnMas.setOnAction(e -> editarStock(true));
         btnMenos.setOnAction(e -> editarStock(false));
+        btnMenu.setOnAction(e -> MainApp.showMe(102));
 
     }
 

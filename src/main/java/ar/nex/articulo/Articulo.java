@@ -2,6 +2,7 @@ package ar.nex.articulo;
 
 import ar.nex.compra.Proveedor;
 import ar.nex.compra.Compra;
+import ar.nex.compra.Pedido;
 import ar.nex.stock.Stock;
 import ar.nex.venta.Venta;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -43,12 +45,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Articulo.findByOtro", query = "SELECT a FROM Articulo a WHERE a.otro = :otro")})
 public class Articulo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+
+    private static final long serialVersionUID = 1L;
+
+    @OneToMany(mappedBy = "articulo")
+    private List<Pedido> pedidoList;
 
     @Column(name = "codigo")
     private String codigo;
@@ -72,12 +77,6 @@ public class Articulo implements Serializable {
     @ManyToMany
     private List<Proveedor> proveedorList;
 
-    @OneToMany(mappedBy = "articuloID")
-    private List<Compra> compraList;
-
-    @OneToMany(mappedBy = "articuloID")
-    private List<Venta> ventaList;
-
     @JoinColumn(name = "categoriaID", referencedColumnName = "id")
     @ManyToOne
     private Categoria categoriaID;
@@ -99,14 +98,6 @@ public class Articulo implements Serializable {
     }
 
     public Articulo(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -175,24 +166,6 @@ public class Articulo implements Serializable {
         this.proveedorList = proveedorList;
     }
 
-    @XmlTransient
-    public List<Compra> getCompraList() {
-        return compraList;
-    }
-
-    public void setCompraList(List<Compra> compraList) {
-        this.compraList = compraList;
-    }
-
-    @XmlTransient
-    public List<Venta> getVentaList() {
-        return ventaList;
-    }
-
-    public void setVentaList(List<Venta> ventaList) {
-        this.ventaList = ventaList;
-    }
-
     public Categoria getCategoriaID() {
         return categoriaID;
     }
@@ -201,21 +174,10 @@ public class Articulo implements Serializable {
         this.categoriaID = categoriaID;
     }
 
-//    @XmlTransient
-//    public List<Stock> getStockList() {
-//        return stockList;
-//    }
-//
-//    public void setStockList(List<Stock> stockList) {
-//        this.stockList = stockList;
-//    }
     public Stock getStock() {
         return stock;
     }
 
-//    public void setStock(Stock stock) {
-//        this.stock = stock;
-//    }
     public void setStock(Stock stock) {
         if (stock == null) {
             if (this.stock != null) {
@@ -263,6 +225,27 @@ public class Articulo implements Serializable {
     @Override
     public String toString() {
         return codigo + " - " + nombre;
+    }
+
+    @XmlTransient
+    public List<Pedido> getPedidoList() {
+        return pedidoList;
+    }
+
+    public void setPedidoList(List<Pedido> pedidoList) {
+        this.pedidoList = pedidoList;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Object toLowerCase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

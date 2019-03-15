@@ -80,7 +80,7 @@ public class HistorialController implements Initializable {
     @FXML
     private void goMenu(ActionEvent event) {
            try {           
-            MainApp.showMainMenu();
+            MainApp.showMe(102);
         } catch (Exception e) {
             e.printStackTrace();
         }

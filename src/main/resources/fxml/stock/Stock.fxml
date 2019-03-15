@@ -52,7 +52,7 @@
     <top>
         <AnchorPane prefHeight="50.0" BorderPane.alignment="CENTER">
             <children>                
-                <Button fx:id="btnBack" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="26.0" layoutY="13.0" mnemonicParsing="false" text="Menu" AnchorPane.rightAnchor="20.0" />
+                <Button fx:id="btnMenu" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="26.0" layoutY="13.0" mnemonicParsing="false" text="Menu" AnchorPane.rightAnchor="20.0" />
             <TextField fx:id="boxBuscar" layoutX="686.0" layoutY="11.0" onInputMethodTextChanged="#Search" onKeyReleased="#Search" prefHeight="30.0" prefWidth="200.0" promptText="Buscar" AnchorPane.leftAnchor="20.0" />
             </children>
         </AnchorPane>

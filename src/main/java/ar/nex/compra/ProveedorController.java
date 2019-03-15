@@ -1,31 +1,29 @@
 package ar.nex.compra;
 
 import ar.nex.app.MainApp;
-import ar.nex.articulo.Articulo;
-import ar.nex.articulo.ArticuloDialogController;
-import ar.nex.jpa.ArticuloJpaController;
-import ar.nex.stock.StockController;
+import ar.nex.jpa.ProveedorJpaController;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.function.Predicate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,11 +41,10 @@ public class ProveedorController implements Initializable {
     @FXML
     private Button btnEdit;
     @FXML
-    private Button deleteBtn;
+    private Button btnMenu;
+
     @FXML
     private TextField searchBox;
-    @FXML
-    private Button btnMenu;
 
     ObservableList<Proveedor> dataProveedor = FXCollections.observableArrayList();
     FilteredList<Proveedor> filteredProveedor = new FilteredList<>(dataProveedor);
@@ -70,9 +67,29 @@ public class ProveedorController implements Initializable {
 
     private static ProveedorController instance;
 
-    public static ProveedorController getInstance() {        
+    public static ProveedorController getInstance() {
         return instance;
     }
+    @FXML
+    private DatePicker boxFecha;
+    @FXML
+    private ComboBox<?> cbxProveedor;
+    @FXML
+    private TextField boxCantidad;
+    @FXML
+    private TextField boxPrecio;
+    @FXML
+    private Button btnAdd1;
+    @FXML
+    private ComboBox<?> cbxArticulo;
+    @FXML
+    private Button btnCancelar;
+    @FXML
+    private Button btnGuardar;
+    @FXML
+    private Label lvlTotalArticulo;
+    @FXML
+    private Label lblTotal;
 
     /**
      * Initializes the controller class.
@@ -81,14 +98,6 @@ public class ProveedorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO        
         instance = this;
-        
-        btnMenu.setOnAction(e -> {
-            try {
-                MainApp.showMainMenu();
-            } catch (IOException ex) {
-                Logger.getLogger(StockController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
 
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colCuit.setCellValueFactory(new PropertyValueFactory<>("cuit"));
@@ -98,6 +107,7 @@ public class ProveedorController implements Initializable {
 
         btnAdd.setOnAction(e -> this.add());
         btnEdit.setOnAction(e -> this.edit());
+        btnMenu.setOnAction(e -> MainApp.showMe(102));
 
         InitService();
         loadDataProveedor();
@@ -111,7 +121,8 @@ public class ProveedorController implements Initializable {
             e.printStackTrace();
         }
     }
-    public ProveedorJpaController getService(){
+
+    public ProveedorJpaController getService() {
         return this.jpaProveedor;
     }
 
@@ -159,15 +170,24 @@ public class ProveedorController implements Initializable {
     }
 
     @FXML
-    private void Delete(ActionEvent event) {
-    }
-
-    @FXML
-    private void Search(InputMethodEvent event) {
-    }
-
-    @FXML
-    private void Search(KeyEvent event) {
+    public void Search() {
+        searchBox.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            filteredProveedor.setPredicate((Predicate<? super Proveedor>) user -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (user.getNombre().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (user.getNombre().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        SortedList<Proveedor> sortedData = new SortedList<>(filteredProveedor);
+        sortedData.comparatorProperty().bind(tableProveedor.comparatorProperty());
+        tableProveedor.setItems(sortedData);
     }
 
     @FXML

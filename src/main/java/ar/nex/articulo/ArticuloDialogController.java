@@ -119,6 +119,7 @@ public class ArticuloDialogController implements Initializable {
             } else {
                 boxStock.setText(articulo.getStock().getCantidad().toString());
                 boxStock.setDisable(true);
+                boxFecha.setDisable(true);
             }
             
             if (articulo.getCompraVenta() == 0) {

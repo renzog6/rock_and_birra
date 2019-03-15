@@ -8,19 +8,13 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -42,7 +36,7 @@ public class Stock implements Serializable {
 
     @Id
     @Basic(optional = false)
-    @Column(name = "id")    
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "fecha")
@@ -50,7 +44,7 @@ public class Stock implements Serializable {
     @Column(name = "cantidad")
     private Integer cantidad;
 
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)    
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<Historia> historiaList;
 
     @OneToOne

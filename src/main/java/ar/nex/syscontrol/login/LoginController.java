@@ -3,7 +3,6 @@ package ar.nex.syscontrol.login;
 import java.io.IOException;
 
 import ar.nex.app.MainApp;
-import ar.nex.syscontrol.config.Historial;
 import ar.nex.syscontrol.config.HistorialService;
 import java.net.URL;
 import java.util.List;
@@ -11,18 +10,12 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class LoginController implements Initializable {
 
@@ -82,7 +75,7 @@ public class LoginController implements Initializable {
 
             if (isLogin) {
                 historial.GuardarEvento("Ingreso al sistema el usuario :" + userLogin.getName());
-                MainApp.showMainMenu();
+                MainApp.showMe(102);
             } else {
                 historial.GuardarEvento("Error al ingreso!!! user:" + usernameBox.getText() + " pass:" + passwordBox.getText());
                 errorReport.setText("Error! Invalid Username or Password.");
@@ -95,6 +88,9 @@ public class LoginController implements Initializable {
     }
 
     public static Usuario getUserLogin() {
+        if (userLogin == null) {
+            userLogin = new Usuario("Desconocido");
+        }
         return userLogin;
     }
 

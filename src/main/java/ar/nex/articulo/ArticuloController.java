@@ -17,6 +17,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -38,7 +39,7 @@ public class ArticuloController implements Initializable {
     FilteredList<Articulo> filteredData = new FilteredList<>(data);
 
     @FXML
-    private Button signOut;
+    private Button btnMenu;
 
     @FXML
     TableView<Articulo> table;
@@ -74,16 +75,17 @@ public class ArticuloController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        instance = this;
+        
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colPCompra.setCellValueFactory(new PropertyValueFactory<>("precioCompra"));
         colPVenta.setCellValueFactory(new PropertyValueFactory<>("precioVenta"));
-        colObservacion.setCellValueFactory(new PropertyValueFactory<>("observacion"));
-
-        instance = this;
+        colObservacion.setCellValueFactory(new PropertyValueFactory<>("observacion"));      
 
         btnAdd.setOnAction(e -> this.add());
         btnEdit.setOnAction(e -> this.edit());
+        btnMenu.setOnAction(e -> MainApp.showMe(102));
 
         InitService();
         loadDatabaseData();
@@ -202,11 +204,6 @@ public class ArticuloController implements Initializable {
         } catch (IOException e) {
             System.err.print(e);
         }
-    }
-
-    @FXML
-    void goSignOut() throws IOException {
-        MainApp.showMainMenu();
     }
 
 }

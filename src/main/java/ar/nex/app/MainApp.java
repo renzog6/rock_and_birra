@@ -12,6 +12,7 @@ public class MainApp extends Application {
 
     public static Stage stage;
     private static BorderPane mainLayout;
+    
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -19,12 +20,9 @@ public class MainApp extends Application {
         MainApp.stage = stage;
         MainApp.stage.setTitle("Rock & Birra");
         MainApp.stage.setMaximized(true);
+                
         MainApp.showMain();
-        //MainApp.showClientes();
-        //MainApp.showMainMenu();
-        MainApp.showLogin();
-        //MainApp.showHome();
-        //MainApp.showPartidos();
+        showMe(102);
     }
 
     public static void showMe(int i) {
@@ -44,15 +42,26 @@ public class MainApp extends Application {
                 case 4:
                     loader.setLocation(MainApp.class.getResource("/fxml/compra/Proveedor.fxml"));
                     break;
+                case 5:
+                    loader.setLocation(MainApp.class.getResource("/fxml/compra/Compra.fxml"));
+                    break;
                 case 11:
                     loader.setLocation(MainApp.class.getResource("/fxml/config/HistorialDetalle.fxml"));
                     break;
+//                case 100:
+//                    loader.setLocation(MainApp.class.getResource("/fxml/MainView.fxml"));
+//                    break;
+                case 101:
+                    loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
+                    break;
+                case 102:
+                    loader.setLocation(MainApp.class.getResource("/fxml/MainMenu.fxml"));
+                    mainLayout.getStylesheets().add("/styles/MainMenu.css");
                 default:
                     break;
             }
-
-            BorderPane mainItems = loader.load();
-            mainLayout.setCenter(mainItems);
+            //BorderPane mainItems = loader.load();
+            mainLayout.setCenter(loader.load());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,52 +78,7 @@ public class MainApp extends Application {
         stage.show();
     }
 
-    public static void showMainMenu() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/MainMenu.fxml"));
-        BorderPane mainItems = loader.load();
-        mainItems.getStylesheets().add("/styles/MainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showClientes() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Cliente.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showConfig() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Config.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showCaja() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/caja/CajaMov.fxml"));
-        BorderPane mainItems = loader.load();
-        //mainItems.getStylesheets().add("/styles/StylesMainMenu.css");
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showLogin() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
-        BorderPane mainItems = loader.load();
-        mainLayout.setCenter(mainItems);
-    }
-
-    public static void showHome() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Home.fxml"));
-        BorderPane mainItems = loader.load();
-        mainLayout.setCenter(mainItems);
-    }
-
+   
     public static void showInformationAlertBox(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialoge");

@@ -34,10 +34,12 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Proveedor implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "cuit")
@@ -50,9 +52,11 @@ public class Proveedor implements Serializable {
     private String observacion;
     @Column(name = "articuloID")
     private Integer articuloID;
+    
     @ManyToMany(mappedBy = "proveedorList")
     private List<Articulo> articuloList;
-    @OneToMany(mappedBy = "proveedorID")
+    
+    @OneToMany(mappedBy = "proveedor")
     private List<Compra> compraList;
 
     public Proveedor() {
@@ -164,7 +168,7 @@ public class Proveedor implements Serializable {
 
     @Override
     public String toString() {
-        return "ar.nex.articulo.Proveedor[ id=" + id + " ]";
+        return  id + " - " + nombre;
     }
     
 }

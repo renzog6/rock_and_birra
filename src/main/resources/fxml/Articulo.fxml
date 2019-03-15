@@ -42,7 +42,7 @@
                       </graphic>
                   </Button>
                   <TextField fx:id="searchBox" onInputMethodTextChanged="#Search" onKeyReleased="#Search" prefHeight="30.0" prefWidth="200.0" promptText="Buscar" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="15.0" />
-                  <Button fx:id="signOut" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#goSignOut" prefHeight="40.0" prefWidth="40.0" text="Salir" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                  <Button fx:id="btnMenu" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" text="Salir" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
             </children>
         </AnchorPane>
     </top>

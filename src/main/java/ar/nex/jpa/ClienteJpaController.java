@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ar.nex.venta;
+package ar.nex.jpa;
 
-import ar.nex.venta.Venta;
-import ar.nex.articulo.exceptions.NonexistentEntityException;
-import ar.nex.articulo.exceptions.PreexistingEntityException;
+import ar.nex.jpa.exceptions.NonexistentEntityException;
+import ar.nex.jpa.exceptions.PreexistingEntityException;
+import ar.nex.venta.Cliente;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import ar.nex.venta.Venta;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -49,12 +50,12 @@ public class ClienteJpaController implements Serializable {
             cliente.setVentaList(attachedVentaList);
             em.persist(cliente);
             for (Venta ventaListVenta : cliente.getVentaList()) {
-                Cliente oldClienteIDOfVentaListVenta = ventaListVenta.getClienteID();
-                ventaListVenta.setClienteID(cliente);
+                Cliente oldClienteOfVentaListVenta = ventaListVenta.getCliente();
+                ventaListVenta.setCliente(cliente);
                 ventaListVenta = em.merge(ventaListVenta);
-                if (oldClienteIDOfVentaListVenta != null) {
-                    oldClienteIDOfVentaListVenta.getVentaList().remove(ventaListVenta);
-                    oldClienteIDOfVentaListVenta = em.merge(oldClienteIDOfVentaListVenta);
+                if (oldClienteOfVentaListVenta != null) {
+                    oldClienteOfVentaListVenta.getVentaList().remove(ventaListVenta);
+                    oldClienteOfVentaListVenta = em.merge(oldClienteOfVentaListVenta);
                 }
             }
             em.getTransaction().commit();
@@ -88,18 +89,18 @@ public class ClienteJpaController implements Serializable {
             cliente = em.merge(cliente);
             for (Venta ventaListOldVenta : ventaListOld) {
                 if (!ventaListNew.contains(ventaListOldVenta)) {
-                    ventaListOldVenta.setClienteID(null);
+                    ventaListOldVenta.setCliente(null);
                     ventaListOldVenta = em.merge(ventaListOldVenta);
                 }
             }
             for (Venta ventaListNewVenta : ventaListNew) {
                 if (!ventaListOld.contains(ventaListNewVenta)) {
-                    Cliente oldClienteIDOfVentaListNewVenta = ventaListNewVenta.getClienteID();
-                    ventaListNewVenta.setClienteID(cliente);
+                    Cliente oldClienteOfVentaListNewVenta = ventaListNewVenta.getCliente();
+                    ventaListNewVenta.setCliente(cliente);
                     ventaListNewVenta = em.merge(ventaListNewVenta);
-                    if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
-                        oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
-                        oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
+                    if (oldClienteOfVentaListNewVenta != null && !oldClienteOfVentaListNewVenta.equals(cliente)) {
+                        oldClienteOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
+                        oldClienteOfVentaListNewVenta = em.merge(oldClienteOfVentaListNewVenta);
                     }
                 }
             }
@@ -134,7 +135,7 @@ public class ClienteJpaController implements Serializable {
             }
             List<Venta> ventaList = cliente.getVentaList();
             for (Venta ventaListVenta : ventaList) {
-                ventaListVenta.setClienteID(null);
+                ventaListVenta.setCliente(null);
                 ventaListVenta = em.merge(ventaListVenta);
             }
             em.remove(cliente);

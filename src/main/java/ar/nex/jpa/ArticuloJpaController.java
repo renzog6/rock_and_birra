@@ -16,10 +16,9 @@ import ar.nex.stock.Stock;
 import ar.nex.compra.Proveedor;
 import java.util.ArrayList;
 import java.util.List;
-import ar.nex.compra.Compra;
+import ar.nex.compra.Pedido;
 import ar.nex.jpa.exceptions.NonexistentEntityException;
 import ar.nex.jpa.exceptions.PreexistingEntityException;
-import ar.nex.venta.Venta;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -42,11 +41,8 @@ public class ArticuloJpaController implements Serializable {
         if (articulo.getProveedorList() == null) {
             articulo.setProveedorList(new ArrayList<Proveedor>());
         }
-        if (articulo.getCompraList() == null) {
-            articulo.setCompraList(new ArrayList<Compra>());
-        }
-        if (articulo.getVentaList() == null) {
-            articulo.setVentaList(new ArrayList<Venta>());
+        if (articulo.getPedidoList() == null) {
+            articulo.setPedidoList(new ArrayList<Pedido>());
         }
         EntityManager em = null;
         try {
@@ -68,18 +64,12 @@ public class ArticuloJpaController implements Serializable {
                 attachedProveedorList.add(proveedorListProveedorToAttach);
             }
             articulo.setProveedorList(attachedProveedorList);
-            List<Compra> attachedCompraList = new ArrayList<Compra>();
-            for (Compra compraListCompraToAttach : articulo.getCompraList()) {
-                compraListCompraToAttach = em.getReference(compraListCompraToAttach.getClass(), compraListCompraToAttach.getId());
-                attachedCompraList.add(compraListCompraToAttach);
+            List<Pedido> attachedPedidoList = new ArrayList<Pedido>();
+            for (Pedido pedidoListPedidoToAttach : articulo.getPedidoList()) {
+                pedidoListPedidoToAttach = em.getReference(pedidoListPedidoToAttach.getClass(), pedidoListPedidoToAttach.getId());
+                attachedPedidoList.add(pedidoListPedidoToAttach);
             }
-            articulo.setCompraList(attachedCompraList);
-            List<Venta> attachedVentaList = new ArrayList<Venta>();
-            for (Venta ventaListVentaToAttach : articulo.getVentaList()) {
-                ventaListVentaToAttach = em.getReference(ventaListVentaToAttach.getClass(), ventaListVentaToAttach.getId());
-                attachedVentaList.add(ventaListVentaToAttach);
-            }
-            articulo.setVentaList(attachedVentaList);
+            articulo.setPedidoList(attachedPedidoList);
             em.persist(articulo);
             if (categoriaID != null) {
                 categoriaID.getArticuloList().add(articulo);
@@ -98,22 +88,13 @@ public class ArticuloJpaController implements Serializable {
                 proveedorListProveedor.getArticuloList().add(articulo);
                 proveedorListProveedor = em.merge(proveedorListProveedor);
             }
-            for (Compra compraListCompra : articulo.getCompraList()) {
-                Articulo oldArticuloIDOfCompraListCompra = compraListCompra.getArticuloID();
-                compraListCompra.setArticuloID(articulo);
-                compraListCompra = em.merge(compraListCompra);
-                if (oldArticuloIDOfCompraListCompra != null) {
-                    oldArticuloIDOfCompraListCompra.getCompraList().remove(compraListCompra);
-                    oldArticuloIDOfCompraListCompra = em.merge(oldArticuloIDOfCompraListCompra);
-                }
-            }
-            for (Venta ventaListVenta : articulo.getVentaList()) {
-                Articulo oldArticuloIDOfVentaListVenta = ventaListVenta.getArticuloID();
-                ventaListVenta.setArticuloID(articulo);
-                ventaListVenta = em.merge(ventaListVenta);
-                if (oldArticuloIDOfVentaListVenta != null) {
-                    oldArticuloIDOfVentaListVenta.getVentaList().remove(ventaListVenta);
-                    oldArticuloIDOfVentaListVenta = em.merge(oldArticuloIDOfVentaListVenta);
+            for (Pedido pedidoListPedido : articulo.getPedidoList()) {
+                Articulo oldArticuloOfPedidoListPedido = pedidoListPedido.getArticulo();
+                pedidoListPedido.setArticulo(articulo);
+                pedidoListPedido = em.merge(pedidoListPedido);
+                if (oldArticuloOfPedidoListPedido != null) {
+                    oldArticuloOfPedidoListPedido.getPedidoList().remove(pedidoListPedido);
+                    oldArticuloOfPedidoListPedido = em.merge(oldArticuloOfPedidoListPedido);
                 }
             }
             em.getTransaction().commit();
@@ -141,10 +122,8 @@ public class ArticuloJpaController implements Serializable {
             Stock stockNew = articulo.getStock();
             List<Proveedor> proveedorListOld = persistentArticulo.getProveedorList();
             List<Proveedor> proveedorListNew = articulo.getProveedorList();
-            List<Compra> compraListOld = persistentArticulo.getCompraList();
-            List<Compra> compraListNew = articulo.getCompraList();
-            List<Venta> ventaListOld = persistentArticulo.getVentaList();
-            List<Venta> ventaListNew = articulo.getVentaList();
+            List<Pedido> pedidoListOld = persistentArticulo.getPedidoList();
+            List<Pedido> pedidoListNew = articulo.getPedidoList();
             if (categoriaIDNew != null) {
                 categoriaIDNew = em.getReference(categoriaIDNew.getClass(), categoriaIDNew.getId());
                 articulo.setCategoriaID(categoriaIDNew);
@@ -160,20 +139,13 @@ public class ArticuloJpaController implements Serializable {
             }
             proveedorListNew = attachedProveedorListNew;
             articulo.setProveedorList(proveedorListNew);
-            List<Compra> attachedCompraListNew = new ArrayList<Compra>();
-            for (Compra compraListNewCompraToAttach : compraListNew) {
-                compraListNewCompraToAttach = em.getReference(compraListNewCompraToAttach.getClass(), compraListNewCompraToAttach.getId());
-                attachedCompraListNew.add(compraListNewCompraToAttach);
+            List<Pedido> attachedPedidoListNew = new ArrayList<Pedido>();
+            for (Pedido pedidoListNewPedidoToAttach : pedidoListNew) {
+                pedidoListNewPedidoToAttach = em.getReference(pedidoListNewPedidoToAttach.getClass(), pedidoListNewPedidoToAttach.getId());
+                attachedPedidoListNew.add(pedidoListNewPedidoToAttach);
             }
-            compraListNew = attachedCompraListNew;
-            articulo.setCompraList(compraListNew);
-            List<Venta> attachedVentaListNew = new ArrayList<Venta>();
-            for (Venta ventaListNewVentaToAttach : ventaListNew) {
-                ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getId());
-                attachedVentaListNew.add(ventaListNewVentaToAttach);
-            }
-            ventaListNew = attachedVentaListNew;
-            articulo.setVentaList(ventaListNew);
+            pedidoListNew = attachedPedidoListNew;
+            articulo.setPedidoList(pedidoListNew);
             articulo = em.merge(articulo);
             if (categoriaIDOld != null && !categoriaIDOld.equals(categoriaIDNew)) {
                 categoriaIDOld.getArticuloList().remove(articulo);
@@ -208,37 +180,20 @@ public class ArticuloJpaController implements Serializable {
                     proveedorListNewProveedor = em.merge(proveedorListNewProveedor);
                 }
             }
-            for (Compra compraListOldCompra : compraListOld) {
-                if (!compraListNew.contains(compraListOldCompra)) {
-                    compraListOldCompra.setArticuloID(null);
-                    compraListOldCompra = em.merge(compraListOldCompra);
+            for (Pedido pedidoListOldPedido : pedidoListOld) {
+                if (!pedidoListNew.contains(pedidoListOldPedido)) {
+                    pedidoListOldPedido.setArticulo(null);
+                    pedidoListOldPedido = em.merge(pedidoListOldPedido);
                 }
             }
-            for (Compra compraListNewCompra : compraListNew) {
-                if (!compraListOld.contains(compraListNewCompra)) {
-                    Articulo oldArticuloIDOfCompraListNewCompra = compraListNewCompra.getArticuloID();
-                    compraListNewCompra.setArticuloID(articulo);
-                    compraListNewCompra = em.merge(compraListNewCompra);
-                    if (oldArticuloIDOfCompraListNewCompra != null && !oldArticuloIDOfCompraListNewCompra.equals(articulo)) {
-                        oldArticuloIDOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
-                        oldArticuloIDOfCompraListNewCompra = em.merge(oldArticuloIDOfCompraListNewCompra);
-                    }
-                }
-            }
-            for (Venta ventaListOldVenta : ventaListOld) {
-                if (!ventaListNew.contains(ventaListOldVenta)) {
-                    ventaListOldVenta.setArticuloID(null);
-                    ventaListOldVenta = em.merge(ventaListOldVenta);
-                }
-            }
-            for (Venta ventaListNewVenta : ventaListNew) {
-                if (!ventaListOld.contains(ventaListNewVenta)) {
-                    Articulo oldArticuloIDOfVentaListNewVenta = ventaListNewVenta.getArticuloID();
-                    ventaListNewVenta.setArticuloID(articulo);
-                    ventaListNewVenta = em.merge(ventaListNewVenta);
-                    if (oldArticuloIDOfVentaListNewVenta != null && !oldArticuloIDOfVentaListNewVenta.equals(articulo)) {
-                        oldArticuloIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
-                        oldArticuloIDOfVentaListNewVenta = em.merge(oldArticuloIDOfVentaListNewVenta);
+            for (Pedido pedidoListNewPedido : pedidoListNew) {
+                if (!pedidoListOld.contains(pedidoListNewPedido)) {
+                    Articulo oldArticuloOfPedidoListNewPedido = pedidoListNewPedido.getArticulo();
+                    pedidoListNewPedido.setArticulo(articulo);
+                    pedidoListNewPedido = em.merge(pedidoListNewPedido);
+                    if (oldArticuloOfPedidoListNewPedido != null && !oldArticuloOfPedidoListNewPedido.equals(articulo)) {
+                        oldArticuloOfPedidoListNewPedido.getPedidoList().remove(pedidoListNewPedido);
+                        oldArticuloOfPedidoListNewPedido = em.merge(oldArticuloOfPedidoListNewPedido);
                     }
                 }
             }
@@ -246,7 +201,7 @@ public class ArticuloJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = articulo.getId();
+                int id = articulo.getId();
                 if (findArticulo(id) == null) {
                     throw new NonexistentEntityException("The articulo with id " + id + " no longer exists.");
                 }
@@ -259,7 +214,7 @@ public class ArticuloJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(int id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -286,15 +241,10 @@ public class ArticuloJpaController implements Serializable {
                 proveedorListProveedor.getArticuloList().remove(articulo);
                 proveedorListProveedor = em.merge(proveedorListProveedor);
             }
-            List<Compra> compraList = articulo.getCompraList();
-            for (Compra compraListCompra : compraList) {
-                compraListCompra.setArticuloID(null);
-                compraListCompra = em.merge(compraListCompra);
-            }
-            List<Venta> ventaList = articulo.getVentaList();
-            for (Venta ventaListVenta : ventaList) {
-                ventaListVenta.setArticuloID(null);
-                ventaListVenta = em.merge(ventaListVenta);
+            List<Pedido> pedidoList = articulo.getPedidoList();
+            for (Pedido pedidoListPedido : pedidoList) {
+                pedidoListPedido.setArticulo(null);
+                pedidoListPedido = em.merge(pedidoListPedido);
             }
             em.remove(articulo);
             em.getTransaction().commit();
@@ -329,7 +279,7 @@ public class ArticuloJpaController implements Serializable {
         }
     }
 
-    public Articulo findArticulo(Integer id) {
+    public Articulo findArticulo(int id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Articulo.class, id);

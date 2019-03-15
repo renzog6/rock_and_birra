@@ -58,7 +58,11 @@ public class GetPK {
 
             Query q = em.createQuery(cq);
 
-            return (Integer) q.getResultList().get(q.getResultList().size() - 1) + 1;
+            if (!q.getResultList().isEmpty()) {
+                return (Integer) q.getResultList().get(q.getResultList().size() - 1) + 1;
+            }
+//            return (Integer) q.getResultList().get(q.getResultList().size() - 1) + 1;
+            return 1;
 
         } catch (Exception e) {
             e.printStackTrace();

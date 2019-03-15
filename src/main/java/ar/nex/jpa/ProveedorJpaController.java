@@ -3,18 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ar.nex.compra;
+package ar.nex.jpa;
 
-import ar.nex.articulo.Articulo;
-import ar.nex.compra.exceptions.NonexistentEntityException;
-import ar.nex.compra.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import ar.nex.articulo.Articulo;
 import java.util.ArrayList;
 import java.util.List;
+import ar.nex.compra.Compra;
+import ar.nex.compra.Proveedor;
+import ar.nex.jpa.exceptions.IllegalOrphanException;
+import ar.nex.jpa.exceptions.NonexistentEntityException;
+import ar.nex.jpa.exceptions.PreexistingEntityException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -62,12 +65,12 @@ public class ProveedorJpaController implements Serializable {
                 articuloListArticulo = em.merge(articuloListArticulo);
             }
             for (Compra compraListCompra : proveedor.getCompraList()) {
-                Proveedor oldProveedorIDOfCompraListCompra = compraListCompra.getProveedorID();
-                compraListCompra.setProveedorID(proveedor);
+                Proveedor oldProveedorOfCompraListCompra = compraListCompra.getProveedor();
+                compraListCompra.setProveedor(proveedor);
                 compraListCompra = em.merge(compraListCompra);
-                if (oldProveedorIDOfCompraListCompra != null) {
-                    oldProveedorIDOfCompraListCompra.getCompraList().remove(compraListCompra);
-                    oldProveedorIDOfCompraListCompra = em.merge(oldProveedorIDOfCompraListCompra);
+                if (oldProveedorOfCompraListCompra != null) {
+                    oldProveedorOfCompraListCompra.getCompraList().remove(compraListCompra);
+                    oldProveedorOfCompraListCompra = em.merge(oldProveedorOfCompraListCompra);
                 }
             }
             em.getTransaction().commit();
@@ -83,7 +86,7 @@ public class ProveedorJpaController implements Serializable {
         }
     }
 
-    public void edit(Proveedor proveedor) throws NonexistentEntityException, Exception {
+    public void edit(Proveedor proveedor) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -93,6 +96,18 @@ public class ProveedorJpaController implements Serializable {
             List<Articulo> articuloListNew = proveedor.getArticuloList();
             List<Compra> compraListOld = persistentProveedor.getCompraList();
             List<Compra> compraListNew = proveedor.getCompraList();
+            List<String> illegalOrphanMessages = null;
+            for (Compra compraListOldCompra : compraListOld) {
+                if (!compraListNew.contains(compraListOldCompra)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Compra " + compraListOldCompra + " since its proveedor field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             List<Articulo> attachedArticuloListNew = new ArrayList<Articulo>();
             for (Articulo articuloListNewArticuloToAttach : articuloListNew) {
                 articuloListNewArticuloToAttach = em.getReference(articuloListNewArticuloToAttach.getClass(), articuloListNewArticuloToAttach.getId());
@@ -120,20 +135,14 @@ public class ProveedorJpaController implements Serializable {
                     articuloListNewArticulo = em.merge(articuloListNewArticulo);
                 }
             }
-            for (Compra compraListOldCompra : compraListOld) {
-                if (!compraListNew.contains(compraListOldCompra)) {
-                    compraListOldCompra.setProveedorID(null);
-                    compraListOldCompra = em.merge(compraListOldCompra);
-                }
-            }
             for (Compra compraListNewCompra : compraListNew) {
                 if (!compraListOld.contains(compraListNewCompra)) {
-                    Proveedor oldProveedorIDOfCompraListNewCompra = compraListNewCompra.getProveedorID();
-                    compraListNewCompra.setProveedorID(proveedor);
+                    Proveedor oldProveedorOfCompraListNewCompra = compraListNewCompra.getProveedor();
+                    compraListNewCompra.setProveedor(proveedor);
                     compraListNewCompra = em.merge(compraListNewCompra);
-                    if (oldProveedorIDOfCompraListNewCompra != null && !oldProveedorIDOfCompraListNewCompra.equals(proveedor)) {
-                        oldProveedorIDOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
-                        oldProveedorIDOfCompraListNewCompra = em.merge(oldProveedorIDOfCompraListNewCompra);
+                    if (oldProveedorOfCompraListNewCompra != null && !oldProveedorOfCompraListNewCompra.equals(proveedor)) {
+                        oldProveedorOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
+                        oldProveedorOfCompraListNewCompra = em.merge(oldProveedorOfCompraListNewCompra);
                     }
                 }
             }
@@ -154,7 +163,7 @@ public class ProveedorJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -166,15 +175,21 @@ public class ProveedorJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The proveedor with id " + id + " no longer exists.", enfe);
             }
+            List<String> illegalOrphanMessages = null;
+            List<Compra> compraListOrphanCheck = proveedor.getCompraList();
+            for (Compra compraListOrphanCheckCompra : compraListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Proveedor (" + proveedor + ") cannot be destroyed since the Compra " + compraListOrphanCheckCompra + " in its compraList field has a non-nullable proveedor field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             List<Articulo> articuloList = proveedor.getArticuloList();
             for (Articulo articuloListArticulo : articuloList) {
                 articuloListArticulo.getProveedorList().remove(proveedor);
                 articuloListArticulo = em.merge(articuloListArticulo);
-            }
-            List<Compra> compraList = proveedor.getCompraList();
-            for (Compra compraListCompra : compraList) {
-                compraListCompra.setProveedorID(null);
-                compraListCompra = em.merge(compraListCompra);
             }
             em.remove(proveedor);
             em.getTransaction().commit();
@@ -185,7 +200,7 @@ public class ProveedorJpaController implements Serializable {
         }
     }
 
-    public List<Proveedor> findProveedorEntities() {        
+    public List<Proveedor> findProveedorEntities() {
         return findProveedorEntities(true, -1, -1);
     }
 

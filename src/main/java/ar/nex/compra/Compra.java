@@ -1,26 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ar.nex.compra;
 
-import ar.nex.articulo.Articulo;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,45 +26,43 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Compra.findAll", query = "SELECT c FROM Compra c"),
-    @NamedQuery(name = "Compra.findById", query = "SELECT c FROM Compra c WHERE c.id = :id"),
     @NamedQuery(name = "Compra.findByFecha", query = "SELECT c FROM Compra c WHERE c.fecha = :fecha"),
-    @NamedQuery(name = "Compra.findByImporte", query = "SELECT c FROM Compra c WHERE c.importe = :importe"),
+    @NamedQuery(name = "Compra.findByProveedor", query = "SELECT c FROM Compra c WHERE c.proveedor = :proveedor"),
+    @NamedQuery(name = "Compra.findByTotal", query = "SELECT c FROM Compra c WHERE c.total = :total"),
     @NamedQuery(name = "Compra.findByEstado", query = "SELECT c FROM Compra c WHERE c.estado = :estado"),
     @NamedQuery(name = "Compra.findByObservacion", query = "SELECT c FROM Compra c WHERE c.observacion = :observacion")})
 public class Compra implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    
     @Id
     @Basic(optional = false)
     @Column(name = "id")
-    private int id;
+    private Integer id;
+
+    private static final long serialVersionUID = 1L;
+
     @Column(name = "fecha")
     private String fecha;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "importe")
-    private Double importe;
+
+    @Column(name = "total")
+    private Double total;
+
     @Column(name = "estado")
     private Integer estado;
     @Column(name = "observacion")
     private String observacion;
-    @JoinColumn(name = "articuloID", referencedColumnName = "id")
-    
-    @ManyToOne
-    private Articulo articuloID;
-    
-    @JoinColumn(name = "proveedorID", referencedColumnName = "id")
-    @ManyToOne
-    private Proveedor proveedorID;
+
+    @JoinColumn(name = "proveedor", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Proveedor proveedor;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra")
+    private List<Pedido> pedidoList;
 
     public Compra() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public Compra(Integer id) {
         this.id = id;
     }
 
@@ -81,12 +74,20 @@ public class Compra implements Serializable {
         this.fecha = fecha;
     }
 
-    public Double getImporte() {
-        return importe;
+    public Proveedor getProveedor() {
+        return proveedor;
     }
 
-    public void setImporte(Double importe) {
-        this.importe = importe;
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public Integer getEstado() {
@@ -105,28 +106,21 @@ public class Compra implements Serializable {
         this.observacion = observacion;
     }
 
-    public Articulo getArticuloID() {
-        return articuloID;
+    @XmlTransient
+    public List<Pedido> getPedidoList() {
+        return pedidoList;
     }
 
-    public void setArticuloID(Articulo articuloID) {
-        this.articuloID = articuloID;
-    }
-
-    public Proveedor getProveedorID() {
-        return proveedorID;
-    }
-
-    public void setProveedorID(Proveedor proveedorID) {
-        this.proveedorID = proveedorID;
+    public void setPedidoList(List<Pedido> pedidoList) {
+        this.pedidoList = pedidoList;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 71 * hash + this.id;
-        hash = 71 * hash + Objects.hashCode(this.fecha);
-        hash = 71 * hash + Objects.hashCode(this.importe);
+        hash = 13 * hash + Objects.hashCode(this.id);
+        hash = 13 * hash + Objects.hashCode(this.total);
+        hash = 13 * hash + Objects.hashCode(this.estado);
         return hash;
     }
 
@@ -142,23 +136,33 @@ public class Compra implements Serializable {
             return false;
         }
         final Compra other = (Compra) obj;
-        if (this.id != other.id) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.fecha, other.fecha)) {
+        if (!Objects.equals(this.total, other.total)) {
             return false;
         }
-        if (!Objects.equals(this.importe, other.importe)) {
+        if (!Objects.equals(this.estado, other.estado)) {
             return false;
         }
         return true;
     }
 
-
-
     @Override
     public String toString() {
-        return "ar.nex.articulo.Compra[ compraPK=";
+        return "Compra{" + "id=" + id + ", fecha=" + fecha + ", total=" + total + '}';
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    void addPedido(Pedido p) {
+        this.pedidoList.add(p);
+    }
+
 }

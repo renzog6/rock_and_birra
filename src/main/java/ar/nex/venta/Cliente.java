@@ -35,11 +35,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByObservacion", query = "SELECT c FROM Cliente c WHERE c.observacion = :observacion")})
 public class Cliente implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
+    @OneToMany(mappedBy = "cliente")
+    private List<Venta> ventaList;
+
+    private static final long serialVersionUID = 1L;
+   
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "telefono")
@@ -49,8 +54,6 @@ public class Cliente implements Serializable {
     private Double saldo;
     @Column(name = "observacion")
     private String observacion;
-    @OneToMany(mappedBy = "clienteID")
-    private List<Venta> ventaList;
 
     public Cliente() {
     }
@@ -132,5 +135,5 @@ public class Cliente implements Serializable {
     public String toString() {
         return "ar.nex.articulo.Cliente[ id=" + id + " ]";
     }
-    
+
 }

@@ -91,7 +91,7 @@ public class StockDialogController implements Initializable {
     public void InitService() {
         System.out.println("ar.nex.articulo.ArticuloController.InitService()");
         try {
-            jpaStock = new StockJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            this.jpaStock = new StockJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
         } catch (Exception e) {
             e.printStackTrace();
         }
