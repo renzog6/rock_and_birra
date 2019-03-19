@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -100,54 +102,25 @@ public class PedidoVentaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
         colArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
         colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-        //colAction.setCellValueFactory(new PropertyValueFactory<>("observacion"));
 
         boxFecha.setValue(LocalDate.now());
 
         totalArticulo = 0;
         total = 0.0;
 
-        InitService();
+        initService();
         loadDataCliente();
         loadDataArticulo();
 
-        InitControls();
+        initControls();
 
     }
 
-    private void InitControls() {
-
-        btnCancelar.setOnAction(e -> ((Node) (e.getSource())).getScene().getWindow().hide());
-        btnGuardar.setOnAction(e -> guardar(e));
-        //btnAdd.setOnAction(e -> addArticulo(e));
-        btnAdd.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode().equals(KeyCode.ENTER)) {
-                    addArticulo(ke);
-                }
-            }
-        });
-
-        AutoCompletionBinding<Cliente> autoCliente = TextFields.bindAutoCompletion(boxCliente, dataPoveedor);
-        autoCliente.setOnAutoCompleted((AutoCompletionBinding.AutoCompletionEvent<Cliente> event) -> {
-            clienteSelect = event.getCompletion();
-        });
-
-        AutoCompletionBinding<Articulo> autoArticulo = TextFields.bindAutoCompletion(boxArticulo, dataArticulo);
-        autoArticulo.setOnAutoCompleted((AutoCompletionBinding.AutoCompletionEvent<Articulo> event) -> {
-            articuloSelect = event.getCompletion();
-        });
-
-        addButtonToTable();
-    }
-
-    public void InitService() {
+    public void initService() {
         System.out.println("ar.nex.venta.PedidoController.InitService()");
         try {
             this.jpaCliente = new ClienteJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
@@ -160,7 +133,6 @@ public class PedidoVentaController implements Initializable {
     }
 
     public void loadDataCliente() {
-        System.out.println("ar.nex.venta.PedidoController.loadDataCliente()");
         try {
             this.dataPoveedor.clear();
             List<Cliente> lst = jpaCliente.findClienteEntities();
@@ -173,47 +145,79 @@ public class PedidoVentaController implements Initializable {
     }
 
     public void loadDataArticulo() {
-        System.out.println("ar.nex.venta.PedidoController.loadDataArticulo()");
         try {
             this.dataArticulo.clear();
             List<Articulo> lst = jpaArticulo.findArticuloEntities();
-            for (Articulo item : lst) {
+            lst.forEach((item) -> {
                 this.dataArticulo.add(item);
-            }
+            });
         } catch (Exception e) {
             System.err.println(e);
         }
     }
 
     public void loadDataPedido(Pedido p) {
-        System.out.println("ar.nex.venta.PedidoController.loadDataPedido()");
         try {
             this.dataPedido.add(p);
             this.tablePedido.setItems(dataPedido);
-
-            totalArticulo += p.getCantidad();
-            lblTotalArticulo.setText("Cantidad de Articulos : " + totalArticulo);
-            total += p.getTotal();
-            lblTotal.setText("Toal : " + total);
-
+            updateTotal(p.getTotal());
+            updateTotalArticulo(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void addArticulo(KeyEvent event) {
-        System.out.println("ar.nex.venta.PedidoController.addArticulo()");
-        try {
-            Pedido p = new Pedido();
-            p.setArticulo(articuloSelect);
-            p.setCantidad(Integer.parseInt(boxCantidad.getText()));
-            p.setPrecio(Double.parseDouble(boxPrecio.getText()));
-            loadDataPedido(p);
+    private void initControls() {
 
-            setControls();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        btnCancelar.setOnAction(e -> ((Node) (e.getSource())).getScene().getWindow().hide());
+        btnGuardar.setOnAction(e -> guardar(e));
+        //btnAdd.setOnAction(e -> addArticulo(e));
+        btnAdd.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                addArticulo(ke);
+            }
+        });
+
+        boxPrecio.setDisable(true);
+
+        boxCantidad.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    boxCantidad.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        AutoCompletionBinding<Cliente> autoCliente = TextFields.bindAutoCompletion(boxCliente, dataPoveedor);
+
+        autoCliente.setOnAutoCompleted(
+                (AutoCompletionBinding.AutoCompletionEvent<Cliente> event) -> {
+                    clienteSelect = event.getCompletion();
+                }
+        );
+
+        AutoCompletionBinding<Articulo> autoArticulo = TextFields.bindAutoCompletion(boxArticulo, dataArticulo);
+
+        autoArticulo.setOnAutoCompleted(
+                (AutoCompletionBinding.AutoCompletionEvent<Articulo> event) -> {
+                    articuloSelect = event.getCompletion();
+                    boxPrecio.setText(articuloSelect.getPrecioVenta().toString());
+                }
+        );
+
+        addButtonToTable();
+    }
+
+    private void updateTotal(double t) {
+        total += t;
+        lblTotal.setText("Toal : " + total);
+    }
+
+    private void updateTotalArticulo(int t) {
+        totalArticulo += t;
+        lblTotalArticulo.setText("Cantidad de Articulos : " + totalArticulo);
     }
 
     private void addButtonToTable() {
@@ -228,8 +232,9 @@ public class PedidoVentaController implements Initializable {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Pedido data = getTableView().getItems().get(getIndex());
+                            updateTotal(-1 * data.getTotal());
+                            updateTotalArticulo(-1);
                             tablePedido.getItems().remove(getIndex());
-                            System.out.println("selectedPedido: " + data);
                         });
                     }
 
@@ -248,8 +253,6 @@ public class PedidoVentaController implements Initializable {
         };
 
         colAction.setCellFactory(cellFactory);
-
-        //tablePedido.getColumns().add(colAction);
     }
 
     private void setControls() {
@@ -265,17 +268,34 @@ public class PedidoVentaController implements Initializable {
         boxPrecio.setText("");
     }
 
+    private void addArticulo(KeyEvent event) {
+        System.out.println("ar.nex.venta.PedidoController.addArticulo()");
+        try {
+            Pedido p = new Pedido();
+            p.setArticulo(articuloSelect);
+            p.setCantidad(Integer.parseInt(boxCantidad.getText()));
+            p.setPrecio(Double.parseDouble(boxPrecio.getText()));
+            loadDataPedido(p);
+
+            setControls();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void guardar(ActionEvent event) {
         System.out.println("ar.nex.venta.PedidoController.guardar()");
         try {
             GetPK pk = new GetPK();
-            Venta venta = new Venta(pk.Nuevo(Venta.class));
+            Venta venta = new Venta(pk.Nuevo(Venta.class
+            ));
             venta.setFecha(boxFecha.getValue().toString());
             venta.setCliente(clienteSelect);
             venta.setTotal(total);
             jpaVenta.create(venta);
             for (Pedido p : dataPedido) {
-                p.setId(pk.Nuevo(Pedido.class));
+                p.setId(pk.Nuevo(Pedido.class
+                ));
                 jpaPedido.create(p);
                 venta.addPedido(p);
                 new StockEditar(p.getArticulo(), false).updateStock(venta.getFecha(), "Venta a > " + venta.getCliente(), p.getCantidad());

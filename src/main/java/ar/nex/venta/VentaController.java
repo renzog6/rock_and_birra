@@ -1,7 +1,6 @@
 package ar.nex.venta;
 
 import ar.nex.articulo.Pedido;
-import ar.nex.compra.*;
 import ar.nex.app.MainApp;
 import ar.nex.jpa.VentaJpaController;
 import ar.nex.jpa.PedidoJpaController;
@@ -71,6 +70,8 @@ public class VentaController implements Initializable {
     @FXML
     private TableColumn<?, ?> colPPrecio;
     @FXML
+    private TableColumn<?, ?> colPTotal;
+    @FXML
     private TableColumn<?, ?> colPEstado;
 
     private static VentaController instance;
@@ -101,10 +102,12 @@ public class VentaController implements Initializable {
         colPArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
         colPCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         colPPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        colPTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         colPEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         InitService();
         loadVenta();
+
     }
 
     private void InitService() {

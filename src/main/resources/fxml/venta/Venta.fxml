@@ -38,6 +38,7 @@
                                 <TableColumn fx:id="colPArticulo" prefWidth="150.0" text="Articulo" />
                                 <TableColumn fx:id="colPCantidad" prefWidth="150.0" text="Cantidad" />
                                 <TableColumn fx:id="colPPrecio" prefWidth="150.0" text="Precio" />                              
+                                <TableColumn fx:id="colPTotal" prefWidth="150.0" text="Total" />
                                 <TableColumn fx:id="colPEstado" prefWidth="150.0" text="Estado" />                              
                             </columns>
                             <columnResizePolicy>

@@ -188,7 +188,7 @@ public class ArticuloController implements Initializable {
         try {
             Stage dialog = new Stage();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ArticuloDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/articulo/ArticuloDialog.fxml"));
             ArticuloDialogController controller = new ArticuloDialogController(articulo);
             loader.setController(controller);
 
