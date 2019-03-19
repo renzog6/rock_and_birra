@@ -1,6 +1,6 @@
-package ar.nex.stock;
+package ar.nex.articulo;
 
-import ar.nex.jpa.HistoriaJpaController;
+import ar.nex.jpa.StockDetalleJpaController;
 import ar.nex.util.GetPK;
 import java.net.URL;
 import java.time.LocalDate;
@@ -24,12 +24,12 @@ import javax.persistence.Persistence;
  *
  * @author Renzo
  */
-public class HistoriaController implements Initializable {
+public class StockDetalleController implements Initializable {
 
-    ObservableList<Historia> dataHistoria = FXCollections.observableArrayList();
-    FilteredList<Historia> filteredHistoria = new FilteredList<>(dataHistoria);
+    ObservableList<StockDetalle> dataStockDetalle = FXCollections.observableArrayList();
+    FilteredList<StockDetalle> filteredStockDetalle = new FilteredList<>(dataStockDetalle);
     @FXML
-    private TableView<Historia> tableHistoria;
+    private TableView<StockDetalle> tableStockDetalle;
     @FXML
     private TableColumn<?, ?> colHFecha;
     @FXML
@@ -37,12 +37,12 @@ public class HistoriaController implements Initializable {
     @FXML
     private TableColumn<?, ?> colHCantidad;
 
-    private HistoriaJpaController jpaHistoria;
-    private Historia historia;
+    private StockDetalleJpaController jpaStockDetalle;
+    private StockDetalle historia;
 
-    private static HistoriaController instance;
+    private static StockDetalleController instance;
 
-    public static HistoriaController getInstance() {
+    public static StockDetalleController getInstance() {
         return instance;
     }
 
@@ -63,25 +63,25 @@ public class HistoriaController implements Initializable {
     public void InitService() {
         System.out.println("ar.nex.articulo.ArticuloController.InitService()");
         try {
-            jpaHistoria = new HistoriaJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            jpaStockDetalle = new StockDetalleJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public HistoriaJpaController getService() {
+    public StockDetalleJpaController getService() {
         System.out.println("ar.nex.articulo.ArticuloController.getService()");
-        return this.jpaHistoria;
+        return this.jpaStockDetalle;
     }
 
     public void loadDatabaseData() {
         System.out.println("ar.nex.articulo.ArticuloController.loadDatabaseData()");
         try {
-            this.dataHistoria.clear();
-            List<Historia> lst = jpaHistoria.findHistoriaEntities();
-            for (Historia item : lst) {
-                this.dataHistoria.add(item);
-                this.tableHistoria.setItems(dataHistoria);
+            this.dataStockDetalle.clear();
+            List<StockDetalle> lst = jpaStockDetalle.findStockDetalleEntities();
+            for (StockDetalle item : lst) {
+                this.dataStockDetalle.add(item);
+                this.tableStockDetalle.setItems(dataStockDetalle);
             }
         } catch (Exception e) {
             System.err.println(e);
@@ -89,45 +89,44 @@ public class HistoriaController implements Initializable {
         }
     }
 
-    public void crearHistoria(Stock stock) {
-        System.out.println("ar.nex.historia.HistoriaController.crearHistoria()");
+    public void crearStockDetalle(Articulo articulo, String fecha) {
+        System.out.println("ar.nex.articulo.StockDetalleController.crearStockDetalle()");
         GetPK pk = new GetPK();
         try {
 
-            historia = new Historia();
-            historia.setId(pk.Nuevo(Historia.class));
-
-            historia.setStock(stock);
-            historia.setFecha(LocalDate.now().toString());
+            historia = new StockDetalle();
+            historia.setId(pk.Nuevo(StockDetalle.class));
+            historia.setFecha(fecha);
+            historia.setArticulo(articulo);
+            historia.setCantidad(articulo.getStock());
             historia.setEvento("Nuevo Articulo creado");
-            historia.setCantidad(stock.getCantidad());
 
             this.InitService();
-            jpaHistoria.create(historia);
+            jpaStockDetalle.create(historia);
         } catch (Exception ex) {
-            Logger.getLogger(HistoriaController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StockDetalleController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public void editarHistoria(Stock stock, String fecha, String detalle, int cantidad) {
-    
-        System.out.println("ar.nex.stock.HistoriaController.editarHistoria()");
+    public void editarStockDetalle(Articulo articulo, String fecha, String detalle, int cantidad) {
+
+        System.out.println("ar.nex.stock.StockDetalleController.editarStockDetalle()");
         GetPK pk = new GetPK();
         try {
 
-            historia = new Historia();
-            historia.setId(pk.Nuevo(Historia.class));
-
-            historia.setStock(stock);
+            historia = new StockDetalle();
+            historia.setId(pk.Nuevo(StockDetalle.class));
+            
             historia.setFecha(fecha);
+            historia.setArticulo(articulo);
             historia.setEvento("Detalle : " + detalle);
             historia.setCantidad(cantidad);
 
             this.InitService();
-            jpaHistoria.create(historia);
+            jpaStockDetalle.create(historia);
         } catch (Exception ex) {
-            Logger.getLogger(HistoriaController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StockDetalleController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

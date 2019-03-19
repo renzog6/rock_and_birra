@@ -1,8 +1,9 @@
-package ar.nex.compra;
+package ar.nex.venta;
 
 import ar.nex.articulo.Pedido;
+import ar.nex.compra.*;
 import ar.nex.app.MainApp;
-import ar.nex.jpa.CompraJpaController;
+import ar.nex.jpa.VentaJpaController;
 import ar.nex.jpa.PedidoJpaController;
 import java.net.URL;
 import java.util.List;
@@ -31,7 +32,7 @@ import javax.persistence.Persistence;
  *
  * @author Renzo
  */
-public class CompraController implements Initializable {
+public class VentaController implements Initializable {
 
     @FXML
     private Button btnMenu;
@@ -48,13 +49,13 @@ public class CompraController implements Initializable {
     @FXML
     private Label lblHistoriaSelect;
 
-    ObservableList<Compra> dataCompra = FXCollections.observableArrayList();
+    ObservableList<Venta> dataVenta = FXCollections.observableArrayList();
     @FXML
-    private TableView<Compra> tableCompra;
+    private TableView<Venta> tableVenta;
     @FXML
     private TableColumn<?, ?> colFecha;
     @FXML
-    private TableColumn<?, ?> colProveedor;
+    private TableColumn<?, ?> colCliente;
     @FXML
     private TableColumn<?, ?> colTotal;
     @FXML
@@ -72,13 +73,13 @@ public class CompraController implements Initializable {
     @FXML
     private TableColumn<?, ?> colPEstado;
 
-    private static CompraController instance;
+    private static VentaController instance;
 
-    public static CompraController getInstance() {
+    public static VentaController getInstance() {
         return instance;
     }
 
-    private CompraJpaController jpaCompra;
+    private VentaJpaController jpaVenta;
     private PedidoJpaController jpaPedido;
 
     /**
@@ -87,13 +88,13 @@ public class CompraController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        CompraController.instance = this;
+        VentaController.instance = this;
 
         btnMenu.setOnAction(e -> MainApp.showMe(102));
         btnMas.setOnAction(e -> crearPedido());
 
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        colProveedor.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
+        colCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
@@ -103,13 +104,13 @@ public class CompraController implements Initializable {
         colPEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         InitService();
-        loadCompra();
+        loadVenta();
     }
 
     private void InitService() {
         System.out.println("ar.nex.articulo.ArticuloController.InitService()");
         try {
-            jpaCompra = new CompraJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            jpaVenta = new VentaJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
             jpaPedido = new PedidoJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,10 +128,10 @@ public class CompraController implements Initializable {
     }
 
     @FXML
-    private void onTableCompra(MouseEvent event
+    private void onTableVenta(MouseEvent event
     ) {
         try {
-            Compra item = (Compra) tableCompra.getSelectionModel().getSelectedItem();
+            Venta item = (Venta) tableVenta.getSelectionModel().getSelectedItem();
             loadPedido(item);
         } catch (Exception e) {
             System.out.println(e);
@@ -143,10 +144,10 @@ public class CompraController implements Initializable {
     }
 
     public void crearPedido() {
-        System.out.println("ar.nex.compra.CompraController.crearPedido()");
+        System.out.println("ar.nex.compra.VentaController.crearPedido()");
         try {
             Stage dialog = new Stage();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/compra/PedidoCompra.fxml")));
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/venta/PedidoVenta.fxml")));
             dialog.setTitle("Nuevo Pedido");
             dialog.setScene(scene);
             dialog.initModality(Modality.APPLICATION_MODAL);
@@ -159,26 +160,26 @@ public class CompraController implements Initializable {
         }
     }
 
-    public void loadCompra() {
-        System.out.println("ar.nex.compra.CompraController.loadCompra()");
+    public void loadVenta() {
+        System.out.println("ar.nex.compra.VentaController.loadVenta()");
         try {
-            this.dataCompra.clear();
-            List<Compra> lst = jpaCompra.findCompraEntities();
-            for (Compra item : lst) {
-                this.dataCompra.add(item);
+            this.dataVenta.clear();
+            List<Venta> lst = jpaVenta.findVentaEntities();
+            for (Venta item : lst) {
+                this.dataVenta.add(item);
             }
-            this.tableCompra.setItems(dataCompra);
+            this.tableVenta.setItems(dataVenta);
         } catch (Exception e) {
             System.err.println(e);
             e.printStackTrace();
         }
     }
 
-    private void loadPedido(Compra compra) {
-        System.out.println("ar.nex.compra.CompraController.loadPedido()");
+    private void loadPedido(Venta compra) {
+        System.out.println("ar.nex.compra.VentaController.loadPedido()");
         try {
             this.dataPedido.clear();
-            //List<Pedido> lst = jpaCompra.findCompraEntities();
+            //List<Pedido> lst = jpaVenta.findVentaEntities();
             for (Pedido item : compra.getPedidoList()) {
                 this.dataPedido.add(item);
             }

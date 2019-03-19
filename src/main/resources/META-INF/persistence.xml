@@ -6,14 +6,13 @@
     <class>ar.nex.syscontrol.cliente.Cliente</class>
     <class>ar.nex.syscontrol.config.Historial</class>
     <class>ar.nex.articulo.Categoria</class>
-    <class>ar.nex.stock.Stock</class>
     <class>ar.nex.venta.Venta</class>
     <class>ar.nex.compra.Compra</class>
     <class>ar.nex.compra.Proveedor</class>
     <class>ar.nex.venta.Cliente</class>
-    <class>ar.nex.stock.Historia</class>
     <class>ar.nex.articulo.Articulo</class>
-    <class>ar.nex.compra.Pedido</class>
+    <class>ar.nex.articulo.StockDetalle</class>
+    <class>ar.nex.articulo.Pedido</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Rock_and_Birra\rock_and_birra.db"/>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>

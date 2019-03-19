@@ -1,7 +1,8 @@
-package ar.nex.compra;
+package ar.nex.articulo;
 
 import ar.nex.venta.Venta;
 import ar.nex.articulo.Articulo;
+import ar.nex.compra.Compra;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;

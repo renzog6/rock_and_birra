@@ -1,4 +1,4 @@
-package ar.nex.syscontrol.utils;
+package ar.nex.util;
 
 import java.util.Optional;
 import javafx.scene.control.Alert;

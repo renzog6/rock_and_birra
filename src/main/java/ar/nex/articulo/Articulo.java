@@ -1,17 +1,11 @@
 package ar.nex.articulo;
 
 import ar.nex.compra.Proveedor;
-import ar.nex.compra.Compra;
-import ar.nex.compra.Pedido;
-import ar.nex.stock.Stock;
-import ar.nex.venta.Venta;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -21,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -42,13 +35,19 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Articulo.findByPrecioVenta", query = "SELECT a FROM Articulo a WHERE a.precioVenta = :precioVenta"),
     @NamedQuery(name = "Articulo.findByObservacion", query = "SELECT a FROM Articulo a WHERE a.observacion = :observacion"),
     @NamedQuery(name = "Articulo.findByCompraVenta", query = "SELECT a FROM Articulo a WHERE a.compraVenta = :compraVenta"),
-    @NamedQuery(name = "Articulo.findByOtro", query = "SELECT a FROM Articulo a WHERE a.otro = :otro")})
+    @NamedQuery(name = "Articulo.findByOtro", query = "SELECT a FROM Articulo a WHERE a.stock = :stock")})
 public class Articulo implements Serializable {
 
     @Id
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+
+    @OneToMany(mappedBy = "articulo")
+    private List<StockDetalle> stockDetalleList;
+
+    @Column(name = "stock")
+    private Integer stock;
 
     private static final long serialVersionUID = 1L;
 
@@ -68,8 +67,6 @@ public class Articulo implements Serializable {
     private String observacion;
     @Column(name = "compra_venta")
     private Integer compraVenta;
-    @Column(name = "otro")
-    private Integer otro;
 
     @JoinTable(name = "articulo_proveedor", joinColumns = {
         @JoinColumn(name = "articulo", referencedColumnName = "id")}, inverseJoinColumns = {
@@ -81,11 +78,6 @@ public class Articulo implements Serializable {
     @ManyToOne
     private Categoria categoriaID;
 
-//    @OneToMany(mappedBy = "articuloID")
-//    private List<Stock> stockList;
-    @OneToOne(mappedBy = "articulo", cascade = CascadeType.ALL)
-    private Stock stock;
-
     public Articulo() {
         this.id = 0;
         this.codigo = "";
@@ -94,7 +86,7 @@ public class Articulo implements Serializable {
         this.precioVenta = 0.0;
         this.observacion = "";
         this.compraVenta = 0;
-        this.otro = 0;
+        this.stock = 0;
     }
 
     public Articulo(Integer id) {
@@ -149,14 +141,6 @@ public class Articulo implements Serializable {
         this.compraVenta = compraVenta;
     }
 
-    public Integer getOtro() {
-        return otro;
-    }
-
-    public void setOtro(Integer otro) {
-        this.otro = otro;
-    }
-
     @XmlTransient
     public List<Proveedor> getProveedorList() {
         return proveedorList;
@@ -172,21 +156,6 @@ public class Articulo implements Serializable {
 
     public void setCategoriaID(Categoria categoriaID) {
         this.categoriaID = categoriaID;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        if (stock == null) {
-            if (this.stock != null) {
-                this.stock.setArticulo(null);
-            }
-        } else {
-            stock.setArticulo(this);
-        }
-        this.stock = stock;
     }
 
     @Override
@@ -236,6 +205,18 @@ public class Articulo implements Serializable {
         this.pedidoList = pedidoList;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = Integer.parseInt(stock);
+    }
+
     public int getId() {
         return id;
     }
@@ -244,8 +225,13 @@ public class Articulo implements Serializable {
         this.id = id;
     }
 
-    public Object toLowerCase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @XmlTransient
+    public List<StockDetalle> getStockDetalleList() {
+        return stockDetalleList;
+    }
+
+    public void setStockDetalleList(List<StockDetalle> stockDetalleList) {
+        this.stockDetalleList = stockDetalleList;
     }
 
 }

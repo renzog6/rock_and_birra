@@ -2,7 +2,6 @@ package ar.nex.articulo;
 
 import ar.nex.app.MainApp;
 import ar.nex.jpa.ArticuloJpaController;
-import ar.nex.stock.StockController;
 import ar.nex.util.GetPK;
 import java.net.URL;
 import java.time.LocalDate;
@@ -117,7 +116,7 @@ public class ArticuloDialogController implements Initializable {
             if (articulo.getId() == 0) {
                 boxStock.setText("0");
             } else {
-                boxStock.setText(articulo.getStock().getCantidad().toString());
+                boxStock.setText(articulo.getStock().toString());
                 boxStock.setDisable(true);
                 boxFecha.setDisable(true);
             }
@@ -150,13 +149,14 @@ public class ArticuloDialogController implements Initializable {
             articulo.setPrecioCompra(Double.parseDouble(boxCompra.getText().replace(",", ".")));
             articulo.setPrecioVenta(Double.parseDouble(boxVenta.getText().replace(",", ".")));
             articulo.setObservacion(boxObservacion.getText());
-
+            articulo.setStock(boxStock.getText());
+            
             if (articulo.getId() == 0) {
                 GetPK pk = new GetPK();
                 articulo.setId(pk.Nuevo(Articulo.class));
                 ArticuloController.getInstance().getService().create(articulo);
 
-                new StockController().crearStock(articulo, boxFecha.getValue().toString(),Integer.valueOf(boxStock.getText()));
+                new StockDetalleController().crearStockDetalle(articulo, boxFecha.getValue().toString());
             } else {                
                 ArticuloController.getInstance().getService().edit(articulo);
             }

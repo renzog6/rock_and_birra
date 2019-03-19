@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 
 import ar.nex.app.MainApp;
 import ar.nex.jpa.ArticuloJpaController;
-import ar.nex.syscontrol.config.HistorialService;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -17,7 +16,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -33,7 +31,7 @@ import javax.persistence.Persistence;
 
 public class ArticuloController implements Initializable {
 
-    HistorialService historial = new HistorialService();
+//    HistorialService historial = new HistorialService();
 
     ObservableList<Articulo> data = FXCollections.observableArrayList();
     FilteredList<Articulo> filteredData = new FilteredList<>(data);
@@ -52,6 +50,8 @@ public class ArticuloController implements Initializable {
     private TableColumn<?, ?> colPCompra;
     @FXML
     private TableColumn<?, ?> colPVenta;
+    @FXML
+    private TableColumn<?, ?> colStock;
     @FXML
     private TableColumn<?, ?> colObservacion;
 
@@ -81,6 +81,7 @@ public class ArticuloController implements Initializable {
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colPCompra.setCellValueFactory(new PropertyValueFactory<>("precioCompra"));
         colPVenta.setCellValueFactory(new PropertyValueFactory<>("precioVenta"));
+        colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         colObservacion.setCellValueFactory(new PropertyValueFactory<>("observacion"));      
 
         btnAdd.setOnAction(e -> this.add());
@@ -91,8 +92,7 @@ public class ArticuloController implements Initializable {
         loadDatabaseData();
     }
 
-    public void InitService() {
-        System.out.println("ar.nex.articulo.ArticuloController.InitService()");
+    public void InitService() {      
         try {
             jpaArticulo = new ArticuloJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
         } catch (Exception e) {
@@ -100,8 +100,7 @@ public class ArticuloController implements Initializable {
         }
     }
 
-    public ArticuloJpaController getService() {
-        System.out.println("ar.nex.articulo.ArticuloController.getService()");
+    public ArticuloJpaController getService() {       
         return this.jpaArticulo;
     }
 

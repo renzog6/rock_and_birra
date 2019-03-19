@@ -1,10 +1,9 @@
-package ar.nex.stock;
+package ar.nex.articulo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,53 +17,40 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Renzo
  */
 @Entity
-@Table(name = "historia")
+@Table(name = "stockDetalle")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Historia.findAll", query = "SELECT h FROM Historia h"),
-    @NamedQuery(name = "Historia.findById", query = "SELECT h FROM Historia h WHERE h.id = :id"),
-    @NamedQuery(name = "Historia.findByFecha", query = "SELECT h FROM Historia h WHERE h.fecha = :fecha"),
-    @NamedQuery(name = "Historia.findByEvento", query = "SELECT h FROM Historia h WHERE h.evento = :evento"),
-    @NamedQuery(name = "Historia.findByCantidad", query = "SELECT h FROM Historia h WHERE h.cantidad = :cantidad")})
-public class Historia implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+    @NamedQuery(name = "StockDetalle.findAll", query = "SELECT s FROM StockDetalle s"),
+    @NamedQuery(name = "StockDetalle.findById", query = "SELECT s FROM StockDetalle s WHERE s.id = :id"),
+    @NamedQuery(name = "StockDetalle.findByFecha", query = "SELECT s FROM StockDetalle s WHERE s.fecha = :fecha"),
+    @NamedQuery(name = "StockDetalle.findByEvento", query = "SELECT s FROM StockDetalle s WHERE s.evento = :evento"),
+    @NamedQuery(name = "StockDetalle.findByCantidad", query = "SELECT s FROM StockDetalle s WHERE s.cantidad = :cantidad"),
+    @NamedQuery(name = "StockDetalle.findByUsuario", query = "SELECT s FROM StockDetalle s WHERE s.usuario = :usuario")})
+public class StockDetalle implements Serializable {
 
     @Id
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
 
+    @JoinColumn(name = "articulo", referencedColumnName = "id")
+    @ManyToOne
+    private Articulo articulo;
+
+    private static final long serialVersionUID = 1L;
     @Column(name = "fecha")
     private String fecha;
     @Column(name = "evento")
     private String evento;
     @Column(name = "cantidad")
     private Integer cantidad;
+    @Column(name = "usuario")
+    private String usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stockID", referencedColumnName = "id")
-    private Stock stock;
-
-    public Historia() {
+    public StockDetalle() {
     }
 
-    public Historia(Integer id, String fecha, String evento, Integer cantidad) {
-        this.id = id;
-        this.fecha = fecha;
-        this.evento = evento;
-        this.cantidad = cantidad;
-    }
-
-    public Historia(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
+    public StockDetalle(Integer id) {
         this.id = id;
     }
 
@@ -92,20 +78,12 @@ public class Historia implements Serializable {
         this.cantidad = cantidad;
     }
 
-//    @XmlTransient
-//    public List<Stock> getStockList() {
-//        return stockList;
-//    }
-//
-//    public void setStockList(List<Stock> stockList) {
-//        this.stockList = stockList;
-//    }
-    public Stock getStock() {
-        return stock;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     @Override
@@ -118,10 +96,10 @@ public class Historia implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Historia)) {
+        if (!(object instanceof StockDetalle)) {
             return false;
         }
-        Historia other = (Historia) object;
+        StockDetalle other = (StockDetalle) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -130,7 +108,23 @@ public class Historia implements Serializable {
 
     @Override
     public String toString() {
-        return "ar.nex.articulo.Historia[ id=" + id + " ]";
+        return "ar.nex.articulo.StockDetalle[ id=" + id + " ]";
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
     }
 
     public String getEventoFull() {

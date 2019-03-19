@@ -1,5 +1,6 @@
 package ar.nex.compra;
 
+import ar.nex.articulo.Pedido;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;

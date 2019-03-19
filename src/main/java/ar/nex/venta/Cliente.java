@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ar.nex.venta;
 
-import ar.nex.venta.Venta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -39,12 +33,12 @@ public class Cliente implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    
+
     @OneToMany(mappedBy = "cliente")
     private List<Venta> ventaList;
 
     private static final long serialVersionUID = 1L;
-   
+
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "telefono")
@@ -56,6 +50,8 @@ public class Cliente implements Serializable {
     private String observacion;
 
     public Cliente() {
+        this.id = 0;
+        this.saldo = 0.0;
     }
 
     public Cliente(Integer id) {
@@ -133,7 +129,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "ar.nex.articulo.Cliente[ id=" + id + " ]";
+        return this.nombre;
     }
 
 }

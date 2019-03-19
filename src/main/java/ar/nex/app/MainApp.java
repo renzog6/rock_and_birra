@@ -12,7 +12,6 @@ public class MainApp extends Application {
 
     public static Stage stage;
     private static BorderPane mainLayout;
-    
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -20,7 +19,7 @@ public class MainApp extends Application {
         MainApp.stage = stage;
         MainApp.stage.setTitle("Rock & Birra");
         MainApp.stage.setMaximized(true);
-                
+
         MainApp.showMain();
         showMe(102);
     }
@@ -34,16 +33,22 @@ public class MainApp extends Application {
                     loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
                     break;
                 case 2:
-                    loader.setLocation(MainApp.class.getResource("/fxml/Articulo.fxml"));
+                    loader.setLocation(MainApp.class.getResource("/fxml/articulo/Articulo.fxml"));
                     break;
                 case 3:
-                    loader.setLocation(MainApp.class.getResource("/fxml/stock/Stock.fxml"));
+                    loader.setLocation(MainApp.class.getResource("/fxml/articulo/Stock.fxml"));
                     break;
                 case 4:
                     loader.setLocation(MainApp.class.getResource("/fxml/compra/Proveedor.fxml"));
                     break;
                 case 5:
                     loader.setLocation(MainApp.class.getResource("/fxml/compra/Compra.fxml"));
+                    break;
+                case 6:
+                    loader.setLocation(MainApp.class.getResource("/fxml/venta/Cliente.fxml"));
+                    break;
+                case 7:
+                    loader.setLocation(MainApp.class.getResource("/fxml/venta/Venta.fxml"));
                     break;
                 case 11:
                     loader.setLocation(MainApp.class.getResource("/fxml/config/HistorialDetalle.fxml"));
@@ -78,7 +83,6 @@ public class MainApp extends Application {
         stage.show();
     }
 
-   
     public static void showInformationAlertBox(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialoge");

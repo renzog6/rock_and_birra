@@ -1,6 +1,6 @@
-package ar.nex.stock;
+package ar.nex.articulo;
 
-import ar.nex.jpa.StockJpaController;
+import ar.nex.jpa.ArticuloJpaController;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -21,12 +21,12 @@ import javax.persistence.Persistence;
  */
 public class StockEditar implements Initializable {
 
-    public StockEditar(Stock stock, boolean suma) {
-        this.stock = stock;
+    public StockEditar(Articulo articulo, boolean suma) {
+        this.articulo = articulo;
         this.suma = suma;
     }
 
-    Stock stock;
+    Articulo articulo;
     boolean suma;
 
     @FXML
@@ -48,32 +48,49 @@ public class StockEditar implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        lblArticulo.setText((suma ? "SUMAR a : " : "RESTAR a : ") + stock.getArticulo().getNombre());
+        lblArticulo.setText((suma ? "SUMAR a : " : "RESTAR a : ") + articulo.getNombre());
 
         btnCancelar.setOnAction(e -> ((Node) (e.getSource())).getScene().getWindow().hide());
-        
+        btnGuardar.setOnAction(e -> guardar(e));
+
         boxFecha.setValue(LocalDate.now());
     }
 
     @FXML
     private void guardar(ActionEvent event) {
-        System.out.println("ar.nex.stock.StockEditar.guardar()");
+        System.out.println("ar.nex.articulo.StockEditar.guardar()");
         try {
             Integer c = suma ? Integer.parseInt(boxCantidad.getText()) : ((-1) * Integer.parseInt(boxCantidad.getText()));
 
-            stock.setCantidad(stock.getCantidad() + c);
-            stock.setFecha(boxFecha.getValue().toString());
+            articulo.setStock(articulo.getStock() + c);
 
-            StockJpaController jpaStock = new StockJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));            
-            jpaStock.edit(stock);            
-            
-            new HistoriaController().editarHistoria(stock, boxFecha.getValue().toString(), boxDetalle.getText(), c);
+            ArticuloJpaController jpaArticulo = new ArticuloJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            jpaArticulo.edit(articulo);
+
+            new StockDetalleController().editarStockDetalle(articulo, boxFecha.getValue().toString(), boxDetalle.getText(), c);
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             ((Node) (event.getSource())).getScene().getWindow().hide();
         }
+
+    }
+    
+        public void updateStock(String fecha, String msg, int cantidad) {        
+        try {
+            Integer c = suma ? cantidad : ((-1) * cantidad);
+
+            articulo.setStock(articulo.getStock() + c);
+
+            ArticuloJpaController jpaArticulo = new ArticuloJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            jpaArticulo.edit(articulo);
+
+            new StockDetalleController().editarStockDetalle(articulo, fecha, msg, c);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
 
     }
 

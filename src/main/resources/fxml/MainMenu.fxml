@@ -30,7 +30,7 @@
                         <Button fx:id="btnArticulo" mnemonicParsing="false" styleClass="button-menu" text="Articulos" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
                         <Button fx:id="btnCliente" mnemonicParsing="false" styleClass="button-menu" text="Clientes" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />                        
                         
-                        <Button fx:id="btnCompra" mnemonicParsing="false" styleClass="button-menu" text="Venta" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnVenta" mnemonicParsing="false" styleClass="button-menu" text="Venta" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Button fx:id="btnCompra" mnemonicParsing="false" styleClass="button-menu" text="Compra" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Button fx:id="btnProveedor" mnemonicParsing="false" styleClass="button-menu" text="Proveedores" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         

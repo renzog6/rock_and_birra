@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.nex.articulo.ArticuloController">
+<BorderPane minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.nex.articulo.ArticuloController">
     <top>
         <AnchorPane minHeight="60.0" prefHeight="60.0" BorderPane.alignment="CENTER">
             <children>
@@ -18,7 +18,7 @@
                       <graphic>
                           <ImageView fitHeight="30.0" fitWidth="30.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="@../img/plus_48.png" />
+                                  <Image url="@../../img/plus_48.png" />
                               </image>
                           </ImageView>
                       </graphic>
@@ -27,7 +27,7 @@
                       <graphic>
                           <ImageView fitHeight="30.0" fitWidth="30.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="@../img/pencil_48.png" />
+                                  <Image url="@../../img/pencil_48.png" />
                               </image>
                           </ImageView>
                       </graphic>
@@ -36,7 +36,7 @@
                       <graphic>
                           <ImageView fitHeight="30.0" fitWidth="30.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="@../img/delete_48.png" />
+                                  <Image url="@../../img/delete_48.png" />
                               </image>
                           </ImageView>
                       </graphic>
@@ -55,6 +55,7 @@
                         <TableColumn fx:id="colNombre" prefWidth="250.0" text="Nombre" />
                         <TableColumn fx:id="colPCompra" prefWidth="100.0" text="Compra $" />
                         <TableColumn fx:id="colPVenta" prefWidth="100.0" text="Venta $" />
+                        <TableColumn fx:id="colStock" prefWidth="250.0" text="Stock" />
                         <TableColumn fx:id="colObservacion" prefWidth="250.0" text="Observacion" />
                     </columns>
                     <columnResizePolicy>

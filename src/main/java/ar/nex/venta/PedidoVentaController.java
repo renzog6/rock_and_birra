@@ -1,11 +1,13 @@
-package ar.nex.compra;
+package ar.nex.venta;
 
 import ar.nex.app.MainApp;
 import ar.nex.articulo.Articulo;
+import ar.nex.articulo.Pedido;
+import ar.nex.articulo.StockEditar;
 import ar.nex.jpa.ArticuloJpaController;
-import ar.nex.jpa.CompraJpaController;
 import ar.nex.jpa.PedidoJpaController;
-import ar.nex.jpa.ProveedorJpaController;
+import ar.nex.jpa.ClienteJpaController;
+import ar.nex.jpa.VentaJpaController;
 import ar.nex.util.GetPK;
 import java.net.URL;
 import java.time.LocalDate;
@@ -39,11 +41,11 @@ import org.controlsfx.control.textfield.TextFields;
  *
  * @author Renzo
  */
-public class PedidoController implements Initializable {
+public class PedidoVentaController implements Initializable {
 
     @FXML
-    private Proveedor proveedorSelect;
-    private ObservableList<Proveedor> dataPoveedor = FXCollections.observableArrayList();
+    private Cliente clienteSelect;
+    private ObservableList<Cliente> dataPoveedor = FXCollections.observableArrayList();
 
     private Articulo articuloSelect;
     private ObservableList<Articulo> dataArticulo = FXCollections.observableArrayList();
@@ -57,7 +59,7 @@ public class PedidoController implements Initializable {
     @FXML
     private TextField boxArticulo;
     @FXML
-    private TextField boxProveedor;
+    private TextField boxCliente;
 
     @FXML
     private Button btnAdd;
@@ -87,10 +89,10 @@ public class PedidoController implements Initializable {
     @FXML
     private TableColumn<Pedido, Void> colAction;
 
-    private ProveedorJpaController jpaProveedor;
+    private ClienteJpaController jpaCliente;
     private ArticuloJpaController jpaArticulo;
     private PedidoJpaController jpaPedido;
-    private CompraJpaController jpaCompra;
+    private VentaJpaController jpaVenta;
 
     /**
      * Initializes the controller class.
@@ -111,7 +113,7 @@ public class PedidoController implements Initializable {
         total = 0.0;
 
         InitService();
-        loadDataProveedor();
+        loadDataCliente();
         loadDataArticulo();
 
         InitControls();
@@ -132,9 +134,9 @@ public class PedidoController implements Initializable {
             }
         });
 
-        AutoCompletionBinding<Proveedor> autoProveedor = TextFields.bindAutoCompletion(boxProveedor, dataPoveedor);
-        autoProveedor.setOnAutoCompleted((AutoCompletionBinding.AutoCompletionEvent<Proveedor> event) -> {
-            proveedorSelect = event.getCompletion();
+        AutoCompletionBinding<Cliente> autoCliente = TextFields.bindAutoCompletion(boxCliente, dataPoveedor);
+        autoCliente.setOnAutoCompleted((AutoCompletionBinding.AutoCompletionEvent<Cliente> event) -> {
+            clienteSelect = event.getCompletion();
         });
 
         AutoCompletionBinding<Articulo> autoArticulo = TextFields.bindAutoCompletion(boxArticulo, dataArticulo);
@@ -146,23 +148,23 @@ public class PedidoController implements Initializable {
     }
 
     public void InitService() {
-        System.out.println("ar.nex.compra.PedidoController.InitService()");
+        System.out.println("ar.nex.venta.PedidoController.InitService()");
         try {
-            this.jpaProveedor = new ProveedorJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            this.jpaCliente = new ClienteJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
             this.jpaArticulo = new ArticuloJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
             this.jpaPedido = new PedidoJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
-            this.jpaCompra = new CompraJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
+            this.jpaVenta = new VentaJpaController(Persistence.createEntityManagerFactory("SysControl-PU"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadDataProveedor() {
-        System.out.println("ar.nex.compra.PedidoController.loadDataProveedor()");
+    public void loadDataCliente() {
+        System.out.println("ar.nex.venta.PedidoController.loadDataCliente()");
         try {
             this.dataPoveedor.clear();
-            List<Proveedor> lst = jpaProveedor.findProveedorEntities();
-            for (Proveedor item : lst) {
+            List<Cliente> lst = jpaCliente.findClienteEntities();
+            for (Cliente item : lst) {
                 this.dataPoveedor.add(item);
             }
         } catch (Exception e) {
@@ -171,7 +173,7 @@ public class PedidoController implements Initializable {
     }
 
     public void loadDataArticulo() {
-        System.out.println("ar.nex.compra.PedidoController.loadDataArticulo()");
+        System.out.println("ar.nex.venta.PedidoController.loadDataArticulo()");
         try {
             this.dataArticulo.clear();
             List<Articulo> lst = jpaArticulo.findArticuloEntities();
@@ -184,7 +186,7 @@ public class PedidoController implements Initializable {
     }
 
     public void loadDataPedido(Pedido p) {
-        System.out.println("ar.nex.compra.PedidoController.loadDataPedido()");
+        System.out.println("ar.nex.venta.PedidoController.loadDataPedido()");
         try {
             this.dataPedido.add(p);
             this.tablePedido.setItems(dataPedido);
@@ -200,7 +202,7 @@ public class PedidoController implements Initializable {
     }
 
     private void addArticulo(KeyEvent event) {
-        System.out.println("ar.nex.compra.PedidoController.addArticulo()");
+        System.out.println("ar.nex.venta.PedidoController.addArticulo()");
         try {
             Pedido p = new Pedido();
             p.setArticulo(articuloSelect);
@@ -264,25 +266,26 @@ public class PedidoController implements Initializable {
     }
 
     private void guardar(ActionEvent event) {
-        System.out.println("ar.nex.compra.PedidoController.guardar()");
+        System.out.println("ar.nex.venta.PedidoController.guardar()");
         try {
             GetPK pk = new GetPK();
-            Compra compra = new Compra(pk.Nuevo(Compra.class));
-            compra.setFecha(boxFecha.getValue().toString());
-            compra.setProveedor(proveedorSelect);
-            compra.setTotal(total);
-            jpaCompra.create(compra);
+            Venta venta = new Venta(pk.Nuevo(Venta.class));
+            venta.setFecha(boxFecha.getValue().toString());
+            venta.setCliente(clienteSelect);
+            venta.setTotal(total);
+            jpaVenta.create(venta);
             for (Pedido p : dataPedido) {
                 p.setId(pk.Nuevo(Pedido.class));
                 jpaPedido.create(p);
-                compra.addPedido(p);
+                venta.addPedido(p);
+                new StockEditar(p.getArticulo(), false).updateStock(venta.getFecha(), "Venta a > " + venta.getCliente(), p.getCantidad());
             }
-            jpaCompra.edit(compra);
+            jpaVenta.edit(venta);
         } catch (Exception e) {
             e.printStackTrace();
         }
         ((Node) (event.getSource())).getScene().getWindow().hide();
-        CompraController.getInstance().loadCompra();
+        VentaController.getInstance().loadVenta();
         MainApp.showInformationAlertBox("Nuevo Aticulo: " + "VAR ACA" + " Added Successfully!");
     }
 }

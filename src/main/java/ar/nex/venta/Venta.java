@@ -1,6 +1,6 @@
 package ar.nex.venta;
 
-import ar.nex.compra.Pedido;
+import ar.nex.articulo.Pedido;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +61,11 @@ public class Venta implements Serializable {
     private List<Pedido> pedidoList;
 
     public Venta() {
+        this.id = 0;
+    }
+
+    public Venta(Integer pk) {
+        this.id = pk;
     }
 
     public String getFecha() {
@@ -158,4 +163,7 @@ public class Venta implements Serializable {
         this.id = id;
     }
 
+      void addPedido(Pedido p) {
+        this.pedidoList.add(p);
+      }
 }

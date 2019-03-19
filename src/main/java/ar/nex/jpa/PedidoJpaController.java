@@ -12,7 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ar.nex.articulo.Articulo;
 import ar.nex.compra.Compra;
-import ar.nex.compra.Pedido;
+import ar.nex.articulo.Pedido;
 import ar.nex.jpa.exceptions.NonexistentEntityException;
 import ar.nex.jpa.exceptions.PreexistingEntityException;
 import ar.nex.venta.Venta;

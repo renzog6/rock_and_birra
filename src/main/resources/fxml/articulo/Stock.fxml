@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -14,16 +12,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.nex.stock.StockController">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ar.nex.articulo.StockController">
     <center>
         <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <TableView fx:id="tableStock" layoutX="-9.0" layoutY="14.0" onMouseClicked="#showOnClick" prefHeight="358.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="tableArticulo" layoutX="-9.0" layoutY="14.0" onMouseClicked="#showOnClick" prefHeight="358.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columns>
-                                <TableColumn fx:id="colFecha" prefWidth="150.0" text="Fecha" />
-                                <TableColumn fx:id="colArticulo" prefWidth="150.0" text="Codigo - Articulo" />
+                                <TableColumn fx:id="colCodigo" prefWidth="150.0" text="Codigo" />
+                                <TableColumn fx:id="colArticulo" prefWidth="150.0" text="Articulo" />
                                 <TableColumn fx:id="colCantidad" prefWidth="150.0" text="Cantidad" />
                             </columns>
                             <columnResizePolicy>
@@ -34,7 +32,7 @@
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <TableView fx:id="tableHistoria" onMouseClicked="#showHsitoriaSelect" layoutX="-9.0" layoutY="14.0" prefHeight="358.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="tableHistoria" layoutX="-9.0" layoutY="14.0" onMouseClicked="#showHsitoriaSelect" prefHeight="358.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columns>
                                 <TableColumn fx:id="colHFecha" prefWidth="150.0" text="Fecha" />
                                 <TableColumn fx:id="colHEvento" prefWidth="150.0" text="Evento" />
@@ -80,7 +78,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Label fx:id="lblStockSelect" layoutX="170.0" layoutY="16.0" AnchorPane.leftAnchor="160.0">
+                  <Label fx:id="lblArticuloSelect" layoutX="170.0" layoutY="16.0" AnchorPane.leftAnchor="160.0">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
